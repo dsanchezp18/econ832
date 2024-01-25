@@ -3,15 +3,17 @@
 # ECON832 Computational Methods for Economics
 # Spring 2024
 
-# Preliminaries -------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------- #
+# Preliminaries
+# -------------------------------------------------------------------------- #
 
 # Import packages (they need to be installed in the computer with using Pkg, Pkg.add("Package Name")
 
 import JuMP # optimizer
 import Ipopt # optimizer
 
-using Random 
-using Distributions
+using Random # For random numbers
+using Distributions # For probability distributions
 
 # Pre define parameters to be used below 
 
@@ -23,87 +25,138 @@ b = 0.5 # Demand slope
 α = 0.5 # Supply intercept
 β = 0.5 # Supply slope
 
-σ_u = 1.5 # Variance of demand shocks
-σ_v = 2.5 # Variance of supply shocks
+σ_u = 1.5 # Std of demand shocks
+σ_v = 2.5 # Std of supply shocks
 
 μ_u = 0.0 # Mean of demand shocks
 μ_v = 0.0 # Mean of supply shocks
 
-# Both demand and supply shocks are going to be mean zero
+# Both demand and supply shocks are going to be mean zero and with a positive standard deviation 
 
 # -------------------------------------------------------------------------- #
-# 1. Naive OLS estimation
+# Naive OLS estimation
 # -------------------------------------------------------------------------- #
 
-# Simulate observational data
+# Simulate observational data for supply and demand
+
+# Create zero vectors first to later allocate values
+
 u = zeros(N)
-v = zeros(N)
+v = zeros(N) 
+
+# In vectors u and v, for each i, assign a random value of the normal distribution with the corresponding mean and standard deviation. 
+
 for i in 1:N
     u[i] = rand(Normal(μ_u, σ_u))
     v[i] = rand(Normal(μ_v, σ_v))
 end
 
-p = zeros(N)
+# Define a price vector, applying the expression for price in equilibrium
+
+p = zeros(N) # First create a vector of zeros to later allocate values
+
+# For each i, assign the value of the expression for price in equilibrium
+
 for i in 1:N
-    p[i]=((a-α)/(β+b)) + ((u[i]-v[i])/(β+b))
+    p[i]=((a-α)/(β+b)) + ((u[i]-v[i])/(β+b)) # Uses the random demand and supply shocks
 end
 
+# Define a quantity vector, applying the expression for quantity in equilibrium
+
+# Vector of zeroes to later allocate values
+
 y = zeros(N)
+
+# For each i, assign the value of the expression for quantity in equilibrium. Also uses the random demand and supply shocks
+
 for i in 1:N
     y[i]= ((a*β + b*α)/(b+β)) + ((β*u[i] + b*v[i])/(β+b))
 end
 
+# Demand and supply curves, with their structural expressions
+# Using both the random shocks and the equilibrium prices and quantities
+
 D = zeros(N)
 S = zeros(N)
+
 for i in 1:N
-    D[i] = a - b*p[i] + u[i]
+    D[i] = a - b*p[i] + u[i] 
     S[i] = α + β*p[i] + v[i]
 end
 
-# Now, estimate naive OLS
-ols_naive = JuMP.Model(Ipopt.Optimizer)     # Non-linear system to be solved for Pi and Pj
-JuMP.@variable(ols_naive, γ0)
-JuMP.@variable(ols_naive, γ1)            
+# Estimate naive OLS below through the Ipopt optimizer
 
-JuMP.@objective(ols_naive, Min, sum( (y[i] - γ0 - γ1*p[i])^2  for i in 1:N) )
-JuMP.optimize!(ols_naive)
+# Non-linear system to be solved for Pi and Pj
 
-γ1_h = JuMP.value.(γ1)          # Value obtained: -0.214. Biased due to simultaneity.
+ols_naive = JuMP.Model(Ipopt.Optimizer)    # Initializing the optimizer
 
-γ1_2 = cov(y,p)/var(p)          # Value obtained: -0.214
+JuMP.@variable(ols_naive, γ0) # Gamma 0 is the intercept
+
+JuMP.@variable(ols_naive, γ1) # Gamma 1 is the slope
+
+JuMP.@objective(ols_naive, Min, sum((y[i] - γ0 - γ1*p[i])^2  for i in 1:N)) # Minimize the sum of squared residuals. This is the objective function
+
+JuMP.optimize!(ols_naive) # Perform the optimization
+
+γ1_h = JuMP.value.(γ1)  # Access the slope. Value obtained: -0.214. Biased due to simultaneity.
+
+# Calculate the same value according to the known formula for the slope of the OLS estimator
+
+γ1_2 = cov(y,p)/var(p)  # Value obtained: -0.214
+
+# The difference is pretty small, so the optimizer approximation is pretty good. 
 
 # -------------------------------------------------------------------------- #
-# 2. IV estimation
+# 2. IV estimation (2SLS)
 # -------------------------------------------------------------------------- #
 
-# -------------------------------------------------------------------------- #
-#   2SLS
+# Simulate data for the instruments x_u and x_v 
 
-# Simulate instrumental data
-c_v = 0.5
+# Relationships of the instruments with the random demand shocks (u = c_u*x_u + ϵ_u) and supply shocks (v = c_v*x_v + ϵ_v)
+
 c_u = 0.5
+c_v = 0.5
+
+# Standard deviations of the unobserved parts of random shocks
 
 σ_ϵu = 0.25
 σ_ϵv = 0.5
 
+# Means of the unobserved parts of random shocks
+
 μ_ϵ_u = 0.0
 μ_ϵ_v = 0.0
 
+# Construct the vectors for the unobserved parts of the demand shocks and supply shocks
+
+# First create zero vectors to later allocate values
 
 ϵ_u = zeros(N)
 ϵ_v = zeros(N)
+
+# Simulate the unobserved part as a random draw from a normal distribution with the corresponding mean and standard deviation (for each i), for supply and demand 
+
 for i in 1:N
-    ϵ_u[i] = rand(Normal(μ_ϵ_u, σ_ϵu))  # Simulate error terms of first stage
+    ϵ_u[i] = rand(Normal(μ_ϵ_u, σ_ϵu)) 
     ϵ_v[i] = rand(Normal(μ_ϵ_v, σ_ϵv))
 end 
 
+# Now we may calculate the instruments x_u and x_v by solving for them from (u = c_u*x_u + ϵ_u) and (v = c_v*x_v + ϵ_v) - this is x_u = (u - ϵ_u)/c_u and x_v = (v - ϵ_v)/c_v
+
+# Create zero vectors to later allocate values
+
 x_u = zeros(N)
 x_v = zeros(N)
+
+# Use the expressions above to calculate the instruments with the loop and the coefficients c_u and c_v
+
 for i in 1:N
     x_u[i] = ( u[i] - ϵ_u[i] ) / c_u 
     x_v[i] = ( v[i] - ϵ_v[i] ) / c_v 
 end
 
+# Estimate b_iv with the "structural" equation for it from the notes
 
-b1_iv2 = -(cov(y,x_v)/cov(p,x_v))               # Value obtained: 0.558. This is a far better estimation than the -0.21 obtained via naive OLS.
+
+b1_iv2 = -(cov(y,x_v)/cov(p,x_v))    # Value obtained: 0.558. This is a far better estimation than the -0.21 obtained via naive OLS.
 
