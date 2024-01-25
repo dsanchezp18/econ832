@@ -1,0 +1,1635 @@
+%% LyX 2.3.7 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[oneside,english]{book}
+\renewcommand{\rmdefault}{cmr}
+\renewcommand{\sfdefault}{cmss}
+\renewcommand{\ttdefault}{cmtt}
+\renewcommand{\familydefault}{\rmdefault}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=1.25in,bmargin=1.25in,lmargin=1.25in,rmargin=1.25in}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+\usepackage{babel}
+\usepackage{wrapfig}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{esint}
+\usepackage[authoryear]{natbib}
+\doublespacing
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},pdfborderstyle={},backref=false,colorlinks=false]
+ {hyperref}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\theoremstyle{definition}
+ \newtheorem{example}{\protect\examplename}
+\theoremstyle{definition}
+\newtheorem{problem}{\protect\problemname}
+\theoremstyle{plain}
+\newtheorem{thm}{\protect\theoremname}
+\theoremstyle{definition}
+\newtheorem{defn}{\protect\definitionname}
+\theoremstyle{plain}
+\newtheorem*{assumption*}{\protect\assumptionname}
+\theoremstyle{plain}
+\newtheorem*{thm*}{\protect\theoremname}
+\theoremstyle{plain}
+\newtheorem{prop}{\protect\propositionname}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{babel}
+\usepackage{babel}
+\usepackage{babel}
+
+
+
+
+
+  \providecommand{\assumptionname}{Assumption}
+  \providecommand{\axiomname}{Axiom}
+  \providecommand{\claimname}{Claim}
+  \providecommand{\definitionname}{Definition}
+  \providecommand{\lemmaname}{Lemma}
+  \providecommand{\propositionname}{Proposition}
+  \providecommand{\remarkname}{Remark}
+\providecommand{\corollaryname}{Corollary}
+\providecommand{\theoremname}{Theorem}
+
+
+
+  \providecommand{\axiomname}{Axiom}
+  \providecommand{\claimname}{Claim}
+  \providecommand{\definitionname}{Definition}
+  \providecommand{\remarkname}{Remark}
+\providecommand{\corollaryname}{Corollary}
+\providecommand{\theoremname}{Theorem}
+
+\makeatother
+
+\usepackage{listings}
+\providecommand{\assumptionname}{Assumption}
+\providecommand{\definitionname}{Definition}
+\providecommand{\examplename}{Example}
+\providecommand{\problemname}{Problem}
+\providecommand{\propositionname}{Proposition}
+\providecommand{\theoremname}{Theorem}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+\title{Computational Economics: Topics on Decision Making}
+\author{Victor H. Aguiar }
+\date{This version: January 2024}
+\maketitle
+
+\part{Parametric Methods}
+
+\chapter{Structural Modeling }
+
+The Cowles Commision defined econometrics as a ``branch of economics
+in which economic theory and statistical methods are fused in the
+analysis of numerical and institutional data'' Hood and Koopmans
+(1953). Econometrics nowadays has a broader definition, but the branch
+of econometrics that combines economic theories with statistical models
+is called structural econometric models. 
+
+\section{The Gravity Model of Trade}
+
+We will illustrate an instance of structural modeling using an example
+from international trade. The gravity model of trade as formalized
+by Anderson and Van Wincoop (2003) is one of the most successful applications
+of structural modeling. The gravity model of trade tries to provide
+a theoretical explanation of the following empirical fact the nominal
+bilateral trade is directly proportional to the mass of the countries
+and inversely proportional to distance. This fact can be generalized
+to many countries.
+
+\begin{example}
+(Theory) Gravity model of trade. 
+
+We have $I$ countries, with typical elements $i,j\in I$. 
+
+We assume that each country specializes in the production of only
+one good. The supply of each good is fixed (equivalently, each region
+is endowed with only positive quantity of one good, and there is no
+production). 
+
+If $c_{ij}$ is the consumption by country $j$ consumers of goods
+from region $i$, consumers in region $j$ maximize
+
+\[
+U_{j}(c)=\left(\sum_{i\in I}\beta_{i}^{(1-\sigma)/\sigma}c_{ij}^{(\sigma-1)/\sigma}\right)^{\sigma/(\sigma-1)},
+\]
+
+subject to the budget constraint
+
+\[
+\sum_{i}p_{ij}c_{ij}=y_{j}.
+\]
+
+We have $\sigma$ as the elasticity of substitution between all goods,
+$\beta_{i}$ is a positive distribution parameter, $y_{j}$ is a regional
+income of country $j$ consumers, and $p_{ij}$ is the price of region
+$i$ good for $j$ consumers. 
+
+Notice that $p_{ij}$ differs per location $j$ due to trade-costs. 
+
+Let $p_{i}$ denote the exporter's supply price, net of trade costs,
+and $t_{ij}\geq1$ is the trade cost factor between $i,j$ (when $t_{ij}=1$
+then there is free-trade).
+
+\[
+p_{ij}=p_{i}t_{ij}.
+\]
+
+We assume that trade costs are absorbed by the exporter. 
+
+Formally, we assume that for each good shipped from $i$ to $j$ the
+exporter bears a costs equal to $t_{ij}-1$ of country $i$ goods.
+The exporter passes on these trade costs to the importer. 
+
+The nominal value of exports is:
+
+\[
+x_{ij}=p_{ij}c_{ij}.
+\]
+
+Market clearing implies here that in nominal terms endowments are
+equal to aggregate demand:
+
+\[
+y_{i}=\sum_{j\in I}x_{ij}.
+\]
+
+1) Show that the nominal demand for country $i$ goods by country
+$j$ consumer is:
+
+\[
+x_{ij}=\left(\frac{\beta_{i}p_{i}t_{ij}}{P_{j}}\right)^{(1-\sigma)}y_{j},
+\]
+
+where $P_{j}$ is the consumer price index of $j$, given by 
+
+\[
+P_{j}=\left[\sum_{i\in I}(\beta_{i}p_{i}t_{ij})^{1-\sigma}\right]^{1/(1-\sigma)}.
+\]
+
+Important: I need step-by-step derivation. 
+
+2) Show, using the nominal market-clearing conditions and the results
+from 1) that:
+
+$\beta_{i}p_{i}=\frac{y_{i}^{1/(1-\sigma)}}{(\sum_{j\in I}(t_{ij}/P_{j})^{1-\sigma}y_{j})^{1/(1-\sigma)}}.$
+
+Important: I need step-by-step derivation.
+
+3) Let $y^{W}=\sum_{j\in I}y_{j}$ be the world income, and income
+share $\theta_{j}=y_{j}/y^{W}$. Show that, replacing $\beta_{i}p_{i}$
+on the nominal demand, we can obtain:
+
+\[
+x_{ij}=\frac{y_{i}y_{j}}{y^{W}}\left(\frac{t_{ij}}{\Pi_{i}P_{j}}\right)^{1-\sigma},
+\]
+
+where 
+
+\[
+\Pi_{i}=\left(\sum_{j\in I}(t_{ij}/P_{j})^{1-\sigma}\theta_{j}\right)^{1/(1-\sigma)}.
+\]
+
+Important: I need step-by-step derivation. 
+
+4) Assume that $t_{ij}=t_{ji}$, where trade barriers are symmetric,
+show that:
+
+\[
+\Pi_{i}=P_{i}.
+\]
+
+Under this condition, we have an implicit solution to the price indexes
+$P_{i}$ given by
+
+\[
+P_{j}^{1-\sigma}=\sum_{i\in I}P_{i}^{\sigma-1}\theta_{i}t_{ij}^{1-\sigma}\forall j,
+\]
+
+show that there is at least one solution to this system of equations.
+
+For this part use the file \textbackslash GitHub\textbackslash Microeconomics1\textbackslash finalexam\textbackslash theory\textbackslash fixedpoint\_contraction\_mapping\_jacobian.pdf,
+Theorem 1 and Theorem 2. In particular, show that the implicit solution
+to the price index $P_{i}$ for all $i\in I$ for a contraction mapping.
+You can assume that $P_{i}$ take values in a closed set for simplicity.
+Also note that, that you have to rewrite the price index equation
+in the form. 
+
+\[
+P_{j}=g_{j}(P_{1},\cdots P_{I}).
+\]
+
+For the gravity model $g$ is continuously differentiable, so you
+can compute it's Jacobian. For the computing the norm of the Jacobian
+use whatever norm makes easier your computation. Euclidean or Max
+matrix norms are good candidates. I used the Euclidean matrix norm. 
+
+Important: Only for this item, assume that $I=\{1,2\}$, $P_{i}\geq1\forall i$,
+$\sigma=\frac{1}{2},t_{ij}=1,\theta_{i}=\frac{1}{2}.$ Remember you
+have to show that the the norm of the Jacobian of the mapping $g$
+is less than 1, for all values of $P_{i}$. 
+
+5) Show that, the gravity model implies that there are constants $\alpha_{i}\forall i\in I$,
+and $\rho=(1-\sigma)$ such that:
+
+\[
+z_{ij}=logx_{ij}-log(y_{i})-log(y_{j})
+\]
+
+\[
+z_{ij}=-\alpha_{i}-\alpha_{j}+\rho log(t_{ij}).
+\]
+\end{example}
+%
+\begin{problem}
+(Programming Part) The results from Problem 1, can be used here even
+if you did not answered correctly to the previous question. No need
+to proof anything here. With the previous results, we obtain the gravity
+system of equations characterizing the general equilibrium of trade:
+
+\[
+x_{ij}=\frac{y_{i}y_{j}}{y^{w}}\left(\frac{t_{ij}}{P_{i}P_{j}}\right)^{1-\sigma},
+\]
+
+\[
+P_{j}^{1-\sigma}=\sum_{i\in I}P_{i}^{\sigma-1}\theta_{i}t_{ij}^{1-\sigma}\forall j.
+\]
+
+1) Solve this system of equations in Julia, for the parameters provided
+in the file /GitHub/Microeconomics1/finalexam/programming/gravity\_model\_parameters.jl
+or in the /GitHub/Microeconomics1/finalexam/programming/data t.csv,
+y.csv and lxhat.csv files inside this folder. Remember for this you
+have $I=\{1,\cdots,30\}$. 
+
+Hint: This is a triangular system of equations. The parameters are
+$y_{i},t_{i,j}\forall i,j\in I$ and $\sigma=1/2$. You do not need
+anything else. 
+
+Hint: Say you want to minimize the following function $f(z_{1},z_{1}\cdots,z_{I})=\sum_{j=1}^{I}(\sum_{i=1}^{I}z_{i}\theta_{ij})^{2}$
+in JuMP. 
+
+\begin{lstlisting}
+import JuMP 
+import Ipopt 
+##Read CSV files and DataFrames management.
+I=30
+theta=ones(I,I)
+example=JuMP.Model(Ipopt.Optimizer) 
+JuMP.@variable(example,z[1:I]>=0)
+JuMP.@NLobjective(,Min,sum((sum( x[i]*theta[i,j] for i in 1:I))^2 for j in 1:I)) 
+JuMP.optimize!(example)
+#get the solution as a vector
+xsol=JuMP.value.(x) 
+ 
+\end{lstlisting}
+
+2) I will provide a dataset of: (i) perturbed nominal trade flows
+$log\hat{x}_{ij}=logx_{ij}+\epsilon_{ij}$, where $\epsilon_{ij}$
+is a draw of a random distribution that is mean zero and pure measurement
+error (you can assume it is independent from the observable variables),
+(ii) income by country, (iii) bilateral trade barriers. 
+
+Using this dataset, estimate $\sigma$. 
+
+Hint: Write down in Julia a contrained OLS problem. 
+
+In Problem 1 we showed that the gravity model implies that there are
+constants $\alpha_{i}\forall i\in I$, and $\rho=(1-\sigma)$ such
+tat:
+
+\[
+z_{ij}=log\hat{x}_{ij}-log(y_{i})-log(y_{j})
+\]
+
+\[
+z_{ij}=\alpha_{i}-\alpha_{j}+\rho log(t_{ij})+\epsilon_{ij}.
+\]
+
+Estimate the linear equation above using JuMP and Ipopt.
+
+3) As the file .../parameters.jl indicates $\sigma=1/2$, use this
+parameter, to simulate a counterfactual of total trade liberalization
+where $t_{ij}^{free}=1$ for all $j,i\in I$.
+
+Hint: Use part 1). Note that you have to solve the model given $\sigma$,
+the new $t_{ij}^{free}$, and incomes that have not changes $y_{i}\forall i$. 
+
+4) 
+\end{problem}
+%
+\begin{proof}
+1) See julia file. 
+
+2) $log\hat{x}_{ij}=log(y_{i})+log(y_{j})-log(y^{W})+(1-\sigma)logt_{ij}-(1-\sigma)logP_{i}-(1-\sigma)logP_{j}+\epsilon_{ij}$
+
+\[
+log\hat{x}_{ij}-log(y_{i})-log(y_{j})=\alpha+\beta log(\frac{t_{ij}}{P_{i}P_{j}})+\epsilon_{ij}
+\]
+
+\[
+z_{ij}=\alpha+\beta[log(t_{ij})-log(P_{i})-log(P_{j})]+\epsilon_{ij}
+\]
+
+st. 
+
+\[
+P_{j}^{\beta}=\sum_{i\in I}P_{i}^{-\beta}\frac{y_{i}}{\alpha}t_{ij}^{\beta}
+\]
+\end{proof}
+
+\section{Understanding Identification and Reduced Form: Supply and Demand.}
+
+Consider a simple market with aggregate demand given by $\mathbf{D}=a-bp+\mathbf{u}$,
+with the usual convention that bold letters represent random variables.
+Aggregate supply $\mathbf{S}=\alpha+\beta p+\mathbf{v}$ for a given
+price $p$. The analyst only observes price and quantities in equilibrium. 
+
+\[
+\mathbf{y}=\frac{a\beta+b\alpha}{b+\beta}+\frac{\beta\mathbf{u}+b\mathbf{v}}{b+\beta}
+\]
+
+\[
+\mathbf{p}=\frac{a-\alpha}{b+\beta}+\frac{\mathbf{u}-\mathbf{v}}{b+\beta}.
+\]
+
+In other words, the analyst observes $(\mathbf{y},\mathbf{p})$. 
+
+This is the joint distribution of quantities and prices in equilibrium.
+Say that a naive analyst wants to obtain the structural elasticity
+of demand, $b$, from this observation. 
+
+He writes down the model:
+
+\[
+\mathbf{y}=\gamma_{0}+\gamma_{1}\mathbf{p}+\mathbf{e}.
+\]
+
+He thens assumes that $E[\mathbf{e}|\mathbf{p]}=0$. Under this we
+can obtain:
+
+\[
+\gamma_{1}=\frac{Cov(\mathbf{y,p})}{Var(\mathbf{p})}=\frac{\beta\sigma_{u}^{2}-b\sigma_{v}^{2}}{\sigma_{u}^{2}+\sigma_{v}^{2}}.
+\]
+
+It is obvious that $\gamma_{1}$ is not equal to $\beta$, in fact
+it is a weighted average of $\beta$ and $b$ and one cannot recover
+$b$ from it. This is called \textbf{simultaneity bias, }which is
+a form of endogeneity. What we have witnessed here is a failure of
+identification due to simultaneity bias. 
+
+\subsection{Moments and Instrumental Variables}
+
+Demand curves and supply curves are identifiable if there is additional
+variation in our observed data. For instance consider the model where
+we break the demand and supply shocks into an observed and an unobserved
+part. 
+
+\[
+\mathbf{u}=c_{u}\mathbf{x}_{u}+\mathbf{\epsilon}_{u}
+\]
+
+\[
+\mathbf{v}=c_{v}\mathbf{x}_{v}+\mathbf{\epsilon_{v}}.
+\]
+
+Moreover, we know that $Cov(x_{u},\epsilon_{v})=0$ and $Cov(x_{v},\epsilon_{u})=0$. 
+
+Then we can identify $b$ by noting that we have the following moment:
+
+\[
+E[\mathbf{x}_{v}\mathbf{\epsilon_{u}}]=0.
+\]
+
+The IV estimator of $b$ is:
+
+\[
+b^{IV}=\frac{Cov[\mathbf{y}\mathbf{x_{v}}]}{Cov[\mathbf{p}\mathbf{x}_{v}]}
+\]
+
+Note that:
+
+\[
+E[\mathbf{yx}_{v}]=E[\frac{a\beta+b\alpha}{b+\beta}\mathbf{x}_{v}+\frac{\beta\mathbf{u}\mathbf{x_{v}}+b\mathbf{v}\mathbf{x_{v}}}{b+\beta}]=E[\frac{a\beta+b\alpha}{b+\beta}\mathbf{x}_{v}+\frac{b\mathbf{v}\mathbf{x}_{v}}{b+\beta}]
+\]
+
+\[
+E[\mathbf{px_{v}}]=E[\frac{a-\alpha}{b+\beta}\mathbf{x}_{v}+\frac{\mathbf{u}x_{v}-\mathbf{v}\mathbf{x}_{v}}{b+\beta}]=E[\frac{a-\alpha}{b+\beta}\mathbf{x}_{v}+\frac{\mathbf{v}\mathbf{x}_{v}}{b+\beta}]
+\]
+
+\[
+E[\mathbf{y}]E[\mathbf{x_{v}}]=[\frac{a\beta+b\alpha}{b+\beta}\mathbf{x_{v}}],
+\]
+
+with $E[\mathbf{u}]=E[\mathbf{v}]=0$.
+
+\[
+E[\mathbf{p}]E[\mathbf{x_{v}}]=E[\frac{a-\alpha}{b+\beta}\mathbf{x}_{v}]
+\]
+
+\[
+b^{IV}=\frac{Cov[\mathbf{y}\mathbf{x_{v}}]}{Cov[\mathbf{p}\mathbf{x}_{v}]}=b.
+\]
+
+Note that this is all done at the population level. In real life you
+will get a finite sample and will have to provide sample analogues
+of the the quantities above and will obtain an estimator $\hat{b}^{IV}$,
+that will converge to $b$ as the sample size goes to infinity (i.e.,
+consistent estimator). The short story about this is that identifying
+structural parameters often needs (i) additional exogenous variation,
+(ii) assuming a functional form, (iii) assuming exclusion restrictions.
+Of course, the credibility of your model and your identification will
+rely on how plausible it is that the exclusion restriction holds. 
+
+\subsection{Two Stages Least Squares}
+
+\[
+\mathbf{p}=\frac{a-\alpha}{b+\beta}+\frac{\mathbf{u}-\mathbf{v}}{b+\beta}
+\]
+
+\[
+\mathbf{u}=c_{u}\mathbf{x}_{u}+\mathbf{\epsilon}_{u}
+\]
+
+\[
+\mathbf{p}=\frac{a-\alpha}{b+\beta}+\frac{\mathbf{c_{u}\mathbf{x}_{u}+\mathbf{\epsilon}_{u}}-\mathbf{v}}{b+\beta}
+\]
+
+\[
+\mathbf{p}=\frac{a-\alpha}{b+\beta}+\frac{\mathbf{c_{u}}}{b+\beta}\mathbf{x}_{u}+\frac{\mathbf{\epsilon}_{u}-\mathbf{v}}{b+\beta}
+\]
+
+\[
+p=\alpha_{1}+\beta_{1}x_{u}+e_{1}
+\]
+
+\[
+e_{1}=\frac{\mathbf{\epsilon}_{u}-\mathbf{v}}{b+\beta}
+\]
+
+\[
+E[p|x_{u}]=\frac{a-\alpha}{b+\beta}+\frac{\mathbf{c_{u}}}{b+\beta}\mathbf{x}_{u}
+\]
+
+\[
+p=E[p|x_{u}]+e_{1}
+\]
+
+\[
+\mathbf{D}=a-bp+\mathbf{u},
+\]
+
+\[
+\mathbf{D}=a-b[E[p|x_{u}]+\mathbf{e_{1}}]+\mathbf{u},
+\]
+
+\[
+\mathbf{D}=a-bE[p|x_{u}]+\mathbf{u}+b\mathbf{e}_{1}
+\]
+
+We can estimate $b$ using $E[p]$ versus quantities, $D=Y$
+
+\[
+Y=a-bE[p|x_{u}]+e_{2}
+\]
+
+\[
+e_{2}=\mathbf{u}+b\mathbf{e}_{1}
+\]
+
+\[
+E[e_{2}E[p|x_{u}]]=0,
+\]
+
+by construction. 
+
+\part{Nonparametric Methods}
+
+\chapter{Entropic Latent Variable Integration via Simulation (ELVIS)}
+
+We consider again a consumer setup. $X=\mathbb{R}_{+}^{K}$, $K=2$,
+and $T=2$, with time window $\mathcal{T}=\{1,2\}$. Let $\mathbf{x}=(\mathbf{p_{t},c_{t}})_{t\in\mathcal{T}}$
+be an observed random vector of consumptions and prices and $\mathbf{e}$
+be an unobserved random vector $\mathbf{e}=(\mathbf{\alpha,(\lambda_{t})_{t\in\mathcal{T}}},(\mathbf{w}_{t})_{t\in\mathcal{T}})$.
+Consider a $g$ vector of moments. The consumers are assumed to be
+Cobb-Douglas $u(c,\alpha)=c_{1}^{\alpha}+c_{2}^{(1-\alpha)}$. The
+first -order-conditions (FOC) of this problem given a lagrange multiplier
+\textbf{$\mathbf{\mathbf{\mathbf{\mathbf{\lambda}}}}=(\mathbf{\lambda}_{t})_{t\in\mathcal{T}}$
+}supported on $\mathbb{R}_{++}$ are 
+
+From the Lagrangian 
+
+\[
+\mathcal{L}=u(c_{1},c_{2},\alpha)+\lambda(p_{1}c_{1}+p_{2}c_{2}-y)
+\]
+
+\[
+\nabla u(c,\alpha)=\left[\begin{array}{c}
+\partial_{1}u(c_{1},c_{2},\alpha)\\
+\partial_{2}u(c_{1},c_{2},\alpha)
+\end{array}\right]
+\]
+
+\[
+\nabla u(c,\alpha)=\lambda p=\lambda\left[\begin{array}{c}
+p_{1}\\
+p_{2}
+\end{array}\right]
+\]
+
+\[
+g_{A,t,1}(x,e)=1(c_{t,1}-w_{t,1}=(\frac{\lambda_{t}p_{t,1}}{\alpha})^{\frac{1}{\alpha-1}})-1\forall t
+\]
+
+\[
+g_{A,t,2}(x,e)=1(c_{t,2}-w_{t,2}=(\frac{\lambda_{t}p_{t,2}}{1-\alpha})^{-\frac{1}{\alpha}})-1\forall t
+\]
+
+\[
+g_{M,k}(x,e)=w_{t,k}\forall k
+\]
+
+This means that there is a joint distribution $\mu\times\pi_{0}$,
+for some measure $\mu\in\mathcal{P}_{E|X}$ and $\pi_{0}\in\mathcal{P}_{X}$
+the observed measure, over the support of $X\times E$ such that 
+
+\[
+\mu\times\pi_{0}(\omega\in\Omega:c_{t,1}(\omega)-w_{t,1}(\omega)=(\frac{\lambda_{t}(\omega)p_{t,1}(\omega)}{\alpha(\omega)})^{\frac{1}{\alpha(\omega)-1}})=1\forall t
+\]
+
+\[
+\mu\times\pi_{0}(\omega\in\Omega:c_{t,1}(\omega)-w_{t,1}(\omega)=(\frac{\lambda_{t}(\omega)p_{t,2}(\omega)}{1-\alpha(\omega)})^{-\frac{1}{\alpha(\omega)}})=1\forall t
+\]
+
+Then the measurement error moment is known and centered around zero:
+
+\[
+E_{\mu\times\pi_{0}}(w_{t,k})=0\forall t,k.
+\]
+
+Collect all these previous moments into the vector of moments $g(x,e)$. 
+\begin{thm}
+\textbf{(Schennach, 2014 ECMA and Aguiar and Kashaev 2022 Restud)
+}The following are equivalent.
+
+1. A random vector $\mathbf{x}=(\mathbf{p_{t},c_{t}})_{t\in\mathcal{T}}$
+is approximately rationalizable by a Cobb-Douglas under centered measurement
+error. 
+
+2. 
+
+\[
+\inf_{\mu\in\mathcal{P}_{E|X}}||E_{\mu\times\pi_{0}}[g(x,e)]||=0.
+\]
+
+where $\pi_{0}\in\mathcal{P}_{X}$ is the observed distribution of
+$\mathbf{x}$. 
+\end{thm}
+We now define a way to check (2) in a way that is computationally
+feasible. 
+\begin{defn}
+(Maximum-entropy moment) 
+
+\[
+h(x;\gamma)=\frac{\int_{e\in E|X}g(x,e)\exp(\gamma'g(x,e))d\eta(e|x)}{\int_{e\in E|X}\exp(\gamma'g(x,e)d\eta(e|x)},
+\]
+
+where $\gamma\in\mathbb{R}^{k+q}$ is a nuisance parameter, and $\eta\in\mathcal{P}_{E|X}$
+is an arbitrary user-input distribution supported on $E|X$ such that
+$E_{\pi_{0}}[logE_{\eta}[\exp(\gamma'g(x,e))|x]]$ exists and twice
+continuously differentiable in $\gamma$ for all $\gamma\in\mathbb{R}^{k+q}$. 
+
+Note that 
+
+\[
+\{d\eta^{*}(\cdot|x;\gamma)=\frac{\exp(\gamma'g(x,\cdot))d\eta(\cdot|x)}{\int_{e\in E|X}\exp(\gamma'g(x,e))d\eta(e|x)},\gamma\in\mathbb{R}^{k+q}\}
+\]
+
+is a family of exponential conditional probability measures. Thus
+the maximum entropy moment $h$ is the marginal moment of the function
+$g$, at which the latent variable has been integrated out using one
+of the members from the above exponential family. We call this the
+Elvis distribution.
+
+The importance of this distribution is:
+\end{defn}
+\begin{thm}
+\textbf{Theorem. }The following are equivalent:
+
+1. A random vector $\mathbf{x}=(\mathbf{p_{t},c_{t}})_{t\in\mathcal{T}}$
+is approximately rationalizable by a Cobb-Douglas under centered measurement
+error. 
+
+2. 
+\[
+\inf_{\gamma\in\mathbb{R}^{k+q}}||E_{\pi_{0}}[h(x;\gamma)]||=0
+\]
+
+where $\pi_{0}\in\mathcal{P}_{X}$ is the observed distribution over
+\textbf{$x$}. 
+\end{thm}
+The idea or intuition behind this theorem is that there exists a distribution
+that satisfies the moment conditions, then there must be a distribution
+in the family of Elvis distributions, and satisfies the same moment
+conditions. This is a finite problem after we have computed the integral
+with respect to the Elvis distribution for a fixed $\gamma$ parameter. 
+
+In Aguiar and Kashaev (AK 2022) we use the following $\eta$ that
+satisfies all the requirements for the theorem to work: 
+
+\[
+\eta(e|x)\propto\exp(-||g_{M}(x,e)||^{2})[1(c_{t,1}-w_{t,1}=(\frac{\lambda_{t}p_{t,1}}{\alpha})^{\frac{1}{\alpha-1}})-1\forall t][1(c_{t,2}-w_{t,2}=(\frac{\lambda_{t}p_{t,2}}{1-\alpha})^{-\frac{1}{\alpha}})-1\forall t].
+\]
+
+Note that we have included the moments of the model $g_{A}$ as a
+support constraint on $\eta$, and the only the moment $g_{M}$ is
+used in the density. 
+
+\section{Simulated GMM and Testing}
+
+The data is $\{x_{i}\}_{i=1}^{n}=\{(p_{t,i},c_{t,i})_{t\in\mathcal{T}}\}_{i=1}^{n}$
+where $n$ is the sample size. The sample analogue of $h$ is 
+
+\[
+\hat{h}_{M}(\gamma)=\frac{1}{n}\sum_{i=1}^{n}h_{M}(x_{i},\gamma)
+\]
+
+\[
+\hat{\Omega}(\gamma)=\frac{1}{n}\sum_{i=1}^{n}h_{M}(x_{i},\gamma)h_{M}(x_{i},\gamma)'-\hat{h}_{M}(\gamma)\hat{h}_{M}(\gamma)'.
+\]
+
+We let $\Omega^{-}$ be the generalized inverse of matrix $\Omega$. 
+
+\[
+TS_{n}=n\inf_{\gamma\in\mathbb{R}^{q}}\hat{h}_{M}(\gamma)\hat{\Omega}^{-}(\gamma)\hat{h}_{M}(\gamma).
+\]
+
+We assume that $\{x_{i}\}_{i=1}^{n}$ is i.i.d. 
+\begin{thm}
+Suppose $\{x_{i}\}_{i=1}^{n}$ is i.i.d. and the previous assumptions
+hold then under the null that the data is rationalizable it follows
+that
+
+\[
+lim_{n\rightarrow\infty}Pr(TS_{n}>\chi_{q,1-\alpha}^{2})\leq\alpha
+\]
+
+for every $\alpha\in(0,1)$. 
+
+If moreover the minimal eigenvalue of the variance matrix $V[h_{M}(x,\gamma)]$
+is uniformly, in $\gamma$, bounded away from zero and its maximal
+eigenvalue is uniformly, in $\gamma$, bounded from above, then under
+the alternative hypothesis that the data is not approximately consistent
+with rationalizability, it follows that
+
+\[
+lim_{n\rightarrow\infty}P(TS_{n}>\chi_{q,1-\alpha})=1.
+\]
+\end{thm}
+Now we can do some recoverability of parameters of interests by test-inversion. 
+
+The $(1-\alpha)$-confidence set for $\theta_{0}$ is
+
+\[
+\{\theta_{0}\in\Theta:TS_{n}(\theta_{0})\leq\chi_{q_{ext},1-\alpha}^{2}\}.
+\]
+
+Note that $q_{ext}=q+d$ where $d$ is the number of new parameters
+introduced in the problem. 
+
+\section{Alternatives to ELVIS: Support approaches (Li and Potoms and DeMuynck:
+Testing revealed preference models with unobserved randomness: a column
+generation approach). }
+
+Observables in $y$ with support $\mathcal{Y}\subseteq\mathbb{R}^{d_{Y}}$.
+Unobservables are collected in $u$ with support $\mathcal{U}\subseteq\mathbb{R}^{d_{U}}$.
+The unknown joint distribution over observables and unobservables
+$(y,u)$ is $\mu$ on some measure space $(\mathcal{Y}\times\mathcal{U},\mathcal{B})$
+where $\mathcal{B}$ is the Borel $\sigma$-algebra on $\mathcal{Y}\times\mathcal{U}\subseteq\mathbb{R}^{d_{U}+d_{Y}}$. 
+\begin{defn}
+A model consists of a tuple $(\mu_{Y},\Gamma,f,\alpha)$, where 
+\end{defn}
+\begin{itemize}
+\item $\mu_{Y}$ is the marginal probability measure with respect to observables, 
+\item $\Gamma\subseteq\mathcal{Y}\times\mathcal{U}$ is a $\mathcal{B}$-measurable
+set that gives all combinations $(y,u)\in\mathcal{Y}\times\mathcal{U}$
+that are consistent with the economic model. 
+\item $f:\mathcal{Y}\times\mathcal{U}\to\mathbb{R}^{K}$ gives a vector
+of measurable functions $f=(f^{1},\cdots,f^{K})$ that govern the
+moment conditions imposed by the economic model 
+\item $\alpha=(\alpha^{1},\cdots,\alpha^{K})\in\mathbb{R}^{K}$ is a $K$-dimensional
+vector of moment values for these functions. 
+\end{itemize}
+The marginal distribution $\mu_{Y}$ corresponds with the joint
+
+\begin{equation}
+\mu_{Y}(A)=\mu(A\times\mathcal{U}).
+\end{equation}
+
+We know that $\Gamma$ encompasses all possible values of $(y,u)$
+that can arise in the model 
+
+\begin{equation}
+\mu(\Gamma)=1.
+\end{equation}
+
+Also the moment conditions are taken with respect to $\mu$ and the
+support $\Gamma$
+
+\[
+E_{\mu}f^{k}=\int_{\Gamma}f^{k}(y,u)d\mu=\alpha^{k}.
+\]
+
+\begin{equation}
+E_{\mu}f=\alpha.
+\end{equation}
+
+The problem is to find a $\mu$ is any such that 1-3 hold. 
+
+Now define $\mathcal{H}(\mu_{Y},\Gamma)$ as the collection of all
+feasible distributions $\mu$ such that 1-2. Define the correspondence
+$F:\mathcal{Y}\rightrightarrows\mathbb{R}^{K}$:
+
+\[
+F(y)=\{f(y,u):(y,u)\in\Gamma\}.
+\]
+
+Note that since $y$ is random $F(y)$ is a random set with support
+on subsets of $\mathbb{R}^{K}$. 
+\begin{assumption*}
+(PD-2) (i) The sets $F(y)$ are closed $\mu_{Y}-a.s.$ (ii) There
+is a measurable function $g(y)$ that only depends on $y$ such that
+$E_{\mu}g(y)<\infty$ and: $g(y)\geq\sup_{(y,u)\in\Gamma}||f(y,u)||$
+$\mu_{Y}-a.s.$.
+\end{assumption*}
+The problem can be rewritten as 
+
+\[
+\min_{\mu\in\mathcal{H}(\mu_{Y},\Gamma)}E_{\mu}||f(y,u)-\alpha||=0,
+\]
+
+where $||\cdot||$ is the Euclidean norm in $\mathbb{R}^{K}$. 
+
+We define a support function. For a compact set $A\subseteq\mathbb{R}^{K}$,
+the support function of $A$, $h_{A}:\mathbb{R}^{K}\to\mathbb{R}$
+is given by:
+
+\[
+h_{A}(\lambda)=\sup_{x\in A}<\lambda,x>,
+\]
+
+where $<\cdot,\cdot>$ denotes the inner product. Let $co(A)$ be
+convex hull of $A$ and $\overline{co}(A)$ the convex, closed closure
+of $A$. 
+
+\[
+\overline{co}(A)=\{x\in\mathbb{R}^{K}:\forall\lambda\in\mathbb{S}^{K},<\lambda,x>\leq h_{A}(\lambda)\},
+\]
+
+where $\mathbb{S}^{K}=\{\lambda\in\mathbb{R}^{K}:||\lambda||=1\}$is
+the $K-1$ dimensional unit simplex. 
+
+If (3) is satisfied then by linearity of the expectation:
+
+\[
+E_{\mu}<\lambda,f(y,u)>=<\lambda,\alpha>\forall\lambda\in\mathbb{S}^{K}.
+\]
+
+Now by (2)
+
+\[
+\mu(\{(y,u)\in\Gamma:<\lambda,f(y,u)>\leq h_{F(y)}(\lambda)\})=1,
+\]
+
+combining the conditions above we obtain
+
+\[
+E_{\mu}[h_{F(y)}(\lambda)]\geq E_{\mu}<\lambda,f(y,u)>=<\lambda,\alpha>\forall\lambda\in\mathbb{S}^{K}.
+\]
+
+Notice that
+
+\[
+E_{\mu}[h_{F(y)}(\lambda)]=E_{\mu_{Y}}[h_{F(y)}(\lambda)],
+\]
+
+then
+
+\[
+E_{\mu_{Y}}[h_{F(y)}(\lambda)]\geq<\lambda,\alpha>\forall\lambda\in\mathbb{S}^{K}.
+\]
+
+\begin{thm*}
+(Li-3) If Assumption PT-2 holds, then $\min_{\mu\in\mathcal{H}(\mu_{Y},\Gamma)}E_{\mu}||f(y,u)-\alpha||=0,$
+holds iff 
+
+\[
+\inf_{\lambda\in\mathbb{S}^{K}}E_{\mu_{Y}}[h_{F(y)}(\lambda)-<\lambda,\alpha>]\geq0.
+\]
+\end{thm*}
+This is an alternative to ELVIS and characterizes the sharp identified
+regions for partially identified econometric models. 
+
+\chapter{Finite Mixture Models, Random Utility Model, Bootstrapping}
+
+Let $X$ be an abstract grand choice set. Let $\mathcal{B}$ a collection
+of measurable Borel subsets of $X$. Let $j\in J$ index one of all
+choice $|J|$ sets $C_{j}\in2^{X}\setminus\emptyset$. Let $P_{j}$
+be a probability measure over $\mathcal{B}$. Many models of choice
+in economics can be written as 
+
+\[
+P_{j}(A)=\int f(A|\alpha)d\mu(\alpha)\quad\forall j\in J.
+\]
+
+Where $f(A|\alpha)$ is a prediction of choice conditional on a behavioral
+model $\alpha$ and $\mu$ is a measure of all behavioral models. 
+
+\textbf{Random Utility Model. }
+
+\[
+\alpha=u,u:X\to\mathbb{R}
+\]
+
+\[
+f(A|u)=1(argmax_{y\in C_{j}}u(y)\in A)
+\]
+
+\[
+P_{j}(A)=\int1(argmax_{y\in C_{j}}u(y)\in A)d\mu(u).
+\]
+
+This model is complex because the space of utilities is infinite dimensional.
+Also we are considering all elements in $\mathcal{B}$ which is a
+large collections of sets. We have to simplify the problem. 
+
+\subsection{Finite $X$ and no indifference. }
+
+If $X$ is finite then we can let $\mathcal{B}$ to be all singletons.
+For instance, $X=\{a,b,c\}$ then $\mathcal{B}=\{\{a\},\{b\},\{c\}\}$.
+Also, notice that the collection of utilities will map to $|X|!$
+linear rankings if we rule out indifference. In terms of utilities
+we require $\mu(u:u\quad\text{is injective})=1$. For the running
+example we have:
+
+\[
+\begin{array}{c}
+\succ^{1}:a\succ^{1}b\succ^{1}c\\
+\succ^{2}:a\succ^{2}c\succ^{2}b\\
+\succ^{3}:b\succ^{3}a\succ^{3}c\\
+\succ^{4}:b\succ^{3}c\succ^{3}a\\
+\succ^{5}:c\succ^{4}a\succ^{4}b\\
+\succ^{6}:c\succ^{4}b\succ^{4}a
+\end{array}.
+\]
+
+This means that we have mapped the infinite collection of utilities
+to $6$ rankings over $X=\{a,b,c\}$. There is no loss of generality
+here!
+
+Now we can write the mixture problem as:
+
+\[
+\rho_{j}(a)=P_{j}(\{a\})=\sum_{\succ\in\mathcal{R}}\mu^{*}(\succ)1(a\succ b\forall b\in C_{j}\setminus\{a\}),
+\]
+
+where $\mathcal{R}\subseteq X\times X$ is the set of linear orders/strict
+preferences on $X$, $\mu^{*}\in\Delta(\mathbb{\mathcal{R}})$, $\mu^{*}(\succ)\geq0$
+and $\sum_{\succ\in\mathcal{R}}\mu^{*}(\succ)=1$.
+
+After discretization, without loss of generality, we can write $\rho_{j}\in\Delta(C_{j})$
+and $\rho=(\rho_{j})_{j\in J}$. Then we can write down
+
+\[
+\rho=A\mu^{*},
+\]
+
+where 
+
+\[
+A=\begin{array}{c}
+\\
+a,\{a,b\}\\
+b,\{a,b\}\\
+b,\{b,c\}\\
+c,\{b,c\}\\
+a,\{a,c\}\\
+c,\{a,c\}\\
+a,\{a,b,c\}\\
+b,\{a,b,c\}\\
+c,\{a,b,c\}
+\end{array}\left[\begin{array}{cccccc}
+\succ^{1} & \succ^{2} & \succ^{3} & \succ^{4} & \succ^{5} & \succ^{6}\\
+1 & 1 & 0 & 0 & 1 & 0\\
+0 & 0 & 1 & 1 & 0 & 1\\
+1 & 0 & 1 & 1 & 0 & 0\\
+0 & 1 & 0 & 0 & 1 & 1\\
+1 & 1 & 1 & 0 & 0 & 0\\
+0 & 0 & 0 & 1 & 1 & 1\\
+1 & 1 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 1 & 0 & 0\\
+0 & 0 & 0 & 0 & 1 & 1
+\end{array}\right]
+\]
+
+
+\subsection{(Kitamura Stoye) $X=\mathbb{R}_{+}^{L}$ and linear budgets. }
+
+We let $X=\mathbb{R}_{+}^{L}$ and $C_{j}=B_{j}=\{x\in X:p_{j}'x\leq w_{j}\}$
+for simplicity we can set $w_{j}=1$ for all $j\in J$. We also let
+$U$ be the set of all $u:X\to\mathbb{R}$ that are strictly (quasi)concave,
+continuous and monotone. We let $O$ be an element of the set of all
+Borel measurable sets on $X$. That means that $\mu$ a measure on
+$U$ produces choice
+
+\[
+P_{j}(O)=\int1(argmax_{y\in B_{j}}u(y)\in O)d\mu(u).
+\]
+
+We will discretize the problem. First notice that because of monotonicity
+choices will be on the budget lines with probability $1$.
+
+\begin{figure}
+\begin{centering}
+\includegraphics[scale=0.6,bb = 0 0 200 100, draft, type=eps]{figures/KSpatches.png}
+\par\end{centering}
+\caption{Patches}
+\end{figure}
+
+Patches are the \textbf{coarsest partition} of intersecting budgets
+in a time period ($I_{j}$ collects those patches): 
+
+\[
+\rho(x_{i|j})=P_{j}(x_{i|j}).
+\]
+
+We then let 
+
+\[
+\rho=(\rho(x_{i|j})_{i\in I_{j},j\in J}).
+\]
+
+We then need to obtain the rational demand types:
+
+\begin{wraptable}{o}{0.5\columnwidth}%
+\begin{centering}
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+ &  & $B_{1}$ & $B_{2}$ & rational\tabularnewline
+\hline 
+\hline 
+Type 1 & $\theta(1,1)$ & $x_{1|1}$ & $x_{1|2}$ & yes\tabularnewline
+\hline 
+Type 2 & $\theta(1,2)$ & $x_{1|1}$ & $x_{2|2}$ & yes\tabularnewline
+\hline 
+Type 3 & $\theta(2,2)$ & $x_{2|1}$ & $x_{2|2}$ & yes\tabularnewline
+\hline 
+Type 4 & $\theta(2,1)$ & $x_{2|1}$ & $x_{1|2}$ & no\tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}
+\caption{Rational Types.}
+
+\end{wraptable}%
+
+WLG, we focus on representative elements of patches (Kitamura and
+Stoye, 2018; henceforth KS). $(x_{i|j}^{*}\in x_{i|j}$). Discretization
+without loss! This has to be proven but we won't do it here. 
+
+We then define 
+
+\[
+\rho=A\nu
+\]
+
+for $\nu\in\Delta(\Theta)$ where $\Theta$ is the set of demand types. 
+
+\[
+A=\begin{array}{c}
+\\
+x_{1|1}\\
+x_{2|1}\\
+x_{1|2}\\
+x_{2|2}
+\end{array}\left[\begin{array}{ccc}
+\theta(1,1) & \theta(1,2) & \theta(2,2)\\
+1 & 1 & 0\\
+0 & 0 & 1\\
+1 & 0 & 0\\
+0 & 1 & 1
+\end{array}\right].
+\]
+
+
+\subsection{Statistical Assumptions}
+
+\[
+\mu_{j}(\alpha)=\mu(\alpha)
+\]
+
+for all $j\in J$. This is an exclusion-restriction that says that
+the distribution of $\alpha$ is independent of the choice situation.
+In the case of RUM this assumption was imposed by McFadden-Richter
+and essentially says that the distribution of utilities is independent
+from budgets:
+
+\[
+\mu_{j}(u)=\mu(u).
+\]
+
+In experimental datasets this assumptions can hold by design. The
+reason is that budgets can be exogenously varied and they will be
+independent of preferences. In reality this assumption may be broken
+in survey data where different individuals may have preferences (e.g.,
+risk aversion parameter) that is correlated with income. We will have
+to deal with this using techniques that can ``fix'' this form of
+endogeneity. After discretization we can write down a discrete type
+space $\mathcal{R}$ that is finite and a discrete number of outcomes
+$x_{k|j}$ for $k=1,\cdots,K_{j}$, such that $a_{k|j}\in C_{j}$. 
+
+\[
+\rho_{j}(x_{k|j})=\rho(x_{k|j}).
+\]
+
+Then let $\rho=(\rho(x_{k|j})_{k\in K_{j},j\in J})$ and we define 
+
+\[
+\rho(x_{k|j})=\sum_{r\in\mathcal{R}}\nu(r)f(x_{k|j}|\phi(r)).
+\]
+
+The key is that for each $\alpha\in\mathcal{A}$ there exists an $r\in\mathcal{R}$
+such that $f(x_{k|j}|\alpha)=f(x_{k|j}|\phi(r))$. Many $\alpha$'s
+map to a single $r$ and there is no $\alpha$ that cannot be mapped
+to some $r\in\mathcal{R}$. We can then always build a matrix as in
+the previous examples $A_{k|j;r}=f(x_{k|j}|\phi(r)).$
+\begin{thm}
+The following are equivalent:
+
+(i) $P$ is consistent with a mixture $P_{j}(A)=\int f(A|\alpha)d\mu(\alpha)$.
+
+(ii) $P$ with vector representation $\rho$ is such that $\rho=A\nu$
+for some $\nu\in\Delta(\mathcal{R})$. 
+\end{thm}
+
+\subsection{Testing}
+
+In reality we do not observe $P_{j}$, in fact we can only estimate
+$\rho$ the discrete counterpart in most situations. As we observed
+in the previous part, we can focus in many instances on the discretized
+problem without loss of generality. We collect choices from budgets
+from a population then 
+
+\[
+\hat{\rho}_{j}(a)=\hat{\rho}_{j,n}(a)=\frac{1}{N_{j}}\sum_{i=1}^{N_{j}}1(a=c_{i}(C_{j})),
+\]
+
+where $c_{i}(C_{j})$ is the observed choice of individual $i$ from
+$C_{j}$. 
+
+In general we are assuming $c_{i}(C_{j})$ are i.i.d. Under that we
+can apply the law of large numbers to conclude that:
+
+\[
+\lim_{n\rightarrow\infty}\hat{\rho}_{j,n}(a)=\rho_{j}(a).
+\]
+
+Notice that even if $\rho$ is consistent with a finite mixture its
+finite sample analogue $\hat{\rho}$ may be such that there is no
+$\nu\in\Delta(\mathcal{R})$ such that
+
+\[
+\hat{\rho}=A\nu.
+\]
+
+The reason is that $\rho-\hat{\rho}=\epsilon$ that is not zero in
+general.
+
+The null hypothesis is stated formally as:
+
+\[
+H_{0}:\exists\nu\geq0,A\nu=\rho.
+\]
+
+Notice that without loss of generality we have not searched over $\nu\in\Delta(\mathcal{R})$
+but only over the convex cone $\mathcal{C}=\{z:A\nu=z,\nu\geq0\}$.
+Alternatively, we can write down the null as:
+
+\[
+H_{0}:\rho\in\mathcal{C}.
+\]
+
+In particular, this is equivalent to testing:
+
+\[
+H_{0}:\min_{\eta\in\mathcal{C}}[\rho-\eta]'\Omega[\rho-\eta]=0,
+\]
+
+for $\Omega$ a deterministic positive definite matrix. 
+
+The sample counterpart of $H_{0}$ is
+
+\[
+\min_{\eta\in\mathcal{C}}[\hat{\rho}-\eta]'\Omega[\hat{\rho}-\eta].
+\]
+
+The test statistic $\mathcal{J}_{N}$
+
+\[
+\mathcal{J}_{N}=N\min_{\eta\in\mathcal{C}}[\hat{\rho}-\eta]'\Omega[\hat{\rho}-\eta]
+\]
+
+\[
+=N\min_{\nu\in\mathbb{R}_{+}^{|\mathcal{R}|}}[\hat{\rho}-A\nu]'\Omega[\hat{\rho}-A\nu].
+\]
+
+If $J_{N}=0$ then the null is accepted but what happens when it is
+above $0$. We have to do statistical hypothesis testing using a simulated
+critical value. 
+
+\subsubsection{Simulating a Critical Value}
+
+We need to obtain $\hat{\rho}^{*(b)}$ for $b=1,\cdots,B$, bootstrap
+sample. 
+
+We need a tuning parameter $\tau_{N}=\sqrt{\frac{log(min_{j}N_{j})}{(min_{j}N_{j})}}$,
+in reality it can be picked such that $\tau_{N}\rightarrow0$ as $\sqrt{N}\tau_{N}\rightarrow\infty$.
+Restrict $\Omega$ to be diagonal and positive definite and $1_{|\mathcal{R}|}$
+is a vector of ones of size $|\mathcal{R}|$. 
+
+(i) Obtain $\tau_{N}-$tightened restricted estimator $\hat{\eta}_{\tau_{n}}$
+which solves:
+
+\[
+\min_{\eta\in\mathcal{\mathcal{C}_{\tau_{N}}}}N[\hat{\rho}-\eta]'\Omega[\hat{\rho}-\eta]=\min_{[\nu-\tau_{N}1_{|\mathcal{R}|}/|\mathcal{R}|]\in\mathbb{R}_{+}^{|\mathcal{R}|}}N[\hat{\rho}-A\nu]'\Omega[\hat{\rho}-A\nu].
+\]
+
+(ii) Define the $\tau_{N}-$tightened recentered boostrap estimator
+
+\[
+\hat{\rho}_{\tau_{N}}^{*(b)}:=\hat{\rho}^{*(b)}-\hat{\rho}+\hat{\eta}_{\tau_{n}},\quad\forall b\in1,\cdots,B.
+\]
+
+(iii) The bootstrap test statistic is
+
+\[
+\mathcal{J}_{N}^{*(b)}=min_{[\nu-\tau_{N}1_{|\mathcal{R}|}/|\mathcal{R}|]\in\mathbb{R}_{+}^{|\mathcal{R}|}}N[\hat{\rho}_{\tau_{N}}^{*(b)}-A\nu]'\Omega[\hat{\rho}_{\tau_{N}}^{*(b)}-A\nu],
+\]
+
+for all $b=1,\cdots,B$. 
+
+(iv) Use the empirical distribution of $\mathcal{J}_{N}^{*(b)}$,
+for $b=1,\cdots,B$, to obtain the critical value for $\mathcal{J}_{N}$. 
+
+\subsection{Dealing with Endogeneity in the Demand Setup (Paper Reference: Revealed
+Price Preference: Theory and Empirical Analysis). }
+
+This paper introduces a new model of consumption. 
+\begin{defn}
+Augmented Utility Functions: Consider $\mathcal{D}=\{p^{t},x^{t}\}_{t=1}^{T}$,
+from a consumer, each observation consists of the prices $p^{t}\in\mathbb{R}_{++}^{L}$
+of the $L$ goods, and the consumer demands $x^{t}\in\mathbb{R}_{+}^{L}$
+at those prices. We have an augmented utility $U:X\times\mathbb{R}_{-}\to\mathbb{R}$,
+that ($X=\mathbb{R}_{+}^{L}$) rationalizes $\mathcal{D}$ in the
+following sense:
+
+\[
+x^{t}\in argmax_{x\in X}U(x,-p^{t\prime}x)
+\]
+
+for all $t=1,\cdots,T$. We assume that this $U$ is monotone on the
+arguments. 
+\end{defn}
+Note that we can define the value function of the problem above that
+is indirect utility over prices: $V:\mathbb{R}_{++}^{L}\to\mathbb{R}$, 
+
+\[
+V(p^{t})=max_{x\in X}U(x,-p^{t\prime}x).
+\]
+
+This is an expenditure-augmented utility function, where $U(x,-e)$
+is the consumer's utility when she acquires $x$ at the cost $e$.
+This means that expenditure is endogenous and dependent on prices. 
+
+Special case is the quasilinear model:
+
+\[
+U(x,-p^{t\prime}x)=u(x)-p'x.
+\]
+
+We can have also nonseparable models:
+
+\[
+U(x,-p^{t\prime}x)=
+\]
+
+Consider the new price preference revelation:
+
+We say that $p^{s}$ is directly (strictly) revealed preferred to
+$p^{t}$ ($p^{s}\succeq_{p}(\succ_{p})p^{t}$) if $p^{s\prime}x^{t}\leq(<)p^{t\prime}x^{t}=e^{t}$
+(note that $p^{s}\succeq_{p}(\succ_{p})p^{t})\implies$$V(p^{s})\geq(>)V(p^{t}$)
+when $\mathcal{D}$ are rationalized by a Augmented Utility). Then
+we define indirect price preference $p^{s}\succeq_{p}^{*}p^{t}$ if
+there is a finite sequence $k,r,l,\cdots,n$, $p^{s}\succeq_{p}p^{k}\succeq_{p}p^{r}\succeq_{p}p^{l}\succeq_{p}\cdots p^{n}\succeq_{p}p^{t}$. 
+\begin{defn}
+Generalized Axiom of Price Revealed Preference (GAPP). We say that
+$\mathcal{D}=\{p^{t},x^{t}\}_{t=1}^{T}$ satisfies GAPP if there is
+no $s,t$ such that $p^{s}\succeq_{p}^{*}p^{t}$ and $p^{t}\succ_{p}p^{s}$. 
+\end{defn}
+\begin{thm}
+Given a data set $\mathcal{D}=\{(p^{t},x^{t})\}_{t=1}^{T}$, the following
+are equivalent:
+\end{thm}
+\begin{enumerate}
+\item $\mathcal{D}$ is rationalized by an augmented utility function. 
+\item $\mathcal{D}$ satisfies GAPP. 
+\item $\mathcal{D}$ is rationalized by an augmented utility function that
+is strictly increasing, continuous, and concave. Moreover, $U$ is
+such that there is always a maximum for all $p\in\mathbb{R}_{++}^{L}$. 
+\end{enumerate}
+We that the Generalized Axiom of Revealed Preference (GARP). We say
+that $x^{t}$ is directly (strictly) revealed preferred to $x^{s}$
+($x^{t}\succeq_{x}x^{s})$ whenever $p^{t\prime}x^{t}\geq(>)p^{t\prime}x^{s}$.
+We define the indirect commodity revealed preference completely analogous
+to the case of the price preference such that we have $x^{t}\succeq_{x}^{*}x^{s}$
+when there is a chain of direct revelation. 
+\begin{defn}
+GARP. We say that $\mathcal{D}=\{p^{t},x^{t}\}_{t=1}^{T}$ satisfies
+GARP if there is no $s,t$ such that $x^{t}\succeq_{p}^{*}x^{s}$
+and $p^{s}\succ_{p}p^{t}$.
+\end{defn}
+\begin{prop}
+Let $\mathcal{D}=\{p^{t},x^{t}\}_{t=1}^{T}$ be a data set and let
+$\mathcal{D}^{*}=\{p^{t},x^{t*}\}_{t=1}^{T}$ such that $x^{t*}=\frac{x^{t}}{p^{t\prime}x^{t}}$.
+Then 
+
+$\mathcal{D}$ satisfies GAPP if and only if $\mathcal{D}^{*}$ satisfies
+GARP.
+\end{prop}
+This is powerful because we can apply the mixture techniques here
+using the normalized patches, we can essentially do RUM for demand
+with endogenous expenditure. 
+
+\part{Machine Learning}
+
+\chapter{Deep Feedforward Networks}
+
+Deep forward networks, or feedforward neural networks (DFNN), are
+the \textbf{quintessential }model of \textbf{deep learning}. 
+\begin{itemize}
+\item Objective: Approximate a function $f^{*}$. 
+\end{itemize}
+For discrete choice, $y=f^{*}(x)$ where an input $x$ (features/attributes)
+is mapped into a category or choice $y$. 
+\begin{itemize}
+\item A DFNN is a model, defined by a mapping:
+\end{itemize}
+\[
+y=f(x,\theta),
+\]
+
+where $\theta$ is a parameter. The objective of DFNN is to learn
+the value of $\theta$ that results in the best approximation of the
+observed instances of $f^{*}$ (dataset). 
+\begin{itemize}
+\item Defining features: 
+\begin{enumerate}
+\item DFNN are called \textbf{feedforward }because information flows through
+the function being evaluated from $x$, through the intermediate computations
+used to define $f$, and finally the output $y$. No feedback is allowed.
+Counterexample: $y_{t}=f(y_{t-1},x_{t},\theta)$ for $t\in\{1,2\}$. 
+\item DFNN are called \textbf{neural }because they are loosely inspired
+by biological neurons. Modernly, they do not try to model a biological
+brain. 
+\item DFNN are called \textbf{networks }because they are typically represented
+by composing many different functions. The model is associated with
+a \textbf{directed acyclical graph} describing how functions are composed
+together: 
+\end{enumerate}
+\[
+f(x)=(f^{d}\circ f^{d-1}\cdots f^{3}\circ f^{2}\circ f^{1})(x),
+\]
+
+where $\circ$ denotes function composition, $f^{1}$ is called the
+\textbf{first layer} of the network, $f^{2}$ is called the \textbf{second
+layer }and so on. The overall length of the chain, $d$, denotes the
+\textbf{depth }of the model. (Deep learning!). The final layer $f^{d}$
+is called the \textbf{output layer. }
+\item Neural network training tries to match $f(x)$ to $f^{*}(x)$. The
+training data provides us with \textbf{noisy }instances of $f^{*}(x)$.
+Namely, 
+\end{itemize}
+\[
+y\simeq f^{*}(x).
+\]
+
+\begin{itemize}
+\item There is no information about the behavior of each \textbf{hidden
+layer. }The dimensionality of each these hidden layers determines
+the \textbf{width }of the model. 
+\item Each entry of the vector $x=(x_{k})_{k=1}^{K}\in X\subseteq\mathbb{R}^{K}$
+can be thought as a \textbf{neuron. }
+\item Each layer is a vector valued function $f^{1}:X\to X^{2}$, and $f^{n}:X^{n-1}\to X^{n}=Y$,
+where $y\in Y$. Then the entry $f_{l}^{1}(x)$ can be thought as
+a neuron, that is \textbf{activated }by receiving information. Each
+entry represents a neuron processing one aspect of this information. 
+\end{itemize}
+\begin{example}
+Linear Probability Model. $y\in\{0,1\}$. 
+
+\[
+y=f^{1}(x)=x'w+b,
+\]
+
+where $\theta=(w,b)$, where $w$ are called \textbf{weights, }and
+$b$ are called \textbf{biases. }
+\end{example}
+%
+\begin{example}
+Logit Probability Model. $y\in\{0,1\}$
+
+\[
+y=(f^{2}\circ f^{1})(x)=\frac{1}{1+exp(x'w+b)},
+\]
+
+where $\theta=(w,b)$, where $w$ are called \textbf{weights, }and
+$b$ are called \textbf{biases, }and $f^{2}(z)=\frac{1}{1+exp(z)}$
+is the logit \textbf{activation function. }
+\end{example}
+%
+\begin{example}
+Mixed Logit Model. 
+
+\[
+y=f^{3}\circ f^{2}\circ f^{1}(x)=\sum_{w\in W}w^{2}(w)\frac{1}{1+exp(x'w+b)}
+\]
+\end{example}
+%
+\begin{example}
+Closed form solution to the XOR function. Consider the XOR function
+that is defined as $f(1,1)=f(0,0)=0$ and $f(1,0)=f(0,1)=1$. The
+vector of features $x=(x_{1},x_{2})$ is a vector of binary variables.
+We have the following four points $\mathbb{X}=\{[0,0]',[0,1]',[1,0]',[1,1]'\}$.
+We will train a DFNN on this points to learn $f$. 
+
+We define a loss function MSE:
+
+\[
+J(\theta)=\frac{1}{4}\sum_{x\in\mathbb{X}}(f^{*}(x)-f(x,\theta))^{2}.
+\]
+
+Now we must \textbf{choose the model $f(x,\theta)$. }Suppose that
+we choose first a linear model 
+
+\[
+f(x;w,b)=x'w+b.
+\]
+
+We can minimize $J(\theta)$ to obtain the solution and it will be
+$w=0,b=\frac{1}{2}$. This linear model is such that $f(x;0,\frac{1}{2})=\frac{1}{2}$
+for all $x$. 
+
+Now let's augment the depth of this DFNN, so let's create a first
+layer with two hidden components this is captured by 
+
+\[
+h=f^{1}(x;W,c)=WX+c,
+\]
+
+where $f^{1}:X\to\mathbb{R}^{2}$, and $h$ represents the hidden
+units. Then we have an output layer 
+
+\[
+y=f^{2}(h;w,b),
+\]
+
+$f^{2}:\mathbb{R}^{2}\to\mathbb{R}_{+}$ we need $h^{2}$ to be nonlinear
+to learn XOR so we use an activation function. A general recommendation
+is the rectifier linear unit ReLU such that 
+
+\[
+g(z)=\max\{0,z\},
+\]
+
+that is applied elementwise to a vector and denoted for simplicity
+with this notation. Then allowing also weights and biases will give
+us the full neural net:
+
+\[
+f(x;W,c,w,b)=f^{2}\circ f^{1}(x,\theta)=w'\max\{0,W'x+c\}+b.
+\]
+
+The solution to this problem is:
+
+\[
+W=\left[\begin{array}{cc}
+1 & 1\\
+1 & 1
+\end{array}\right],
+\]
+
+\[
+c=\left[\begin{array}{c}
+0\\
+-1
+\end{array}\right],
+\]
+
+\[
+w=\left[\begin{array}{c}
+1\\
+-2
+\end{array}\right],
+\]
+
+and $b=0$. 
+
+We can now get the points 
+
+\[
+X=\left[\begin{array}{cc}
+0 & 0\\
+0 & 1\\
+1 & 0\\
+1 & 1
+\end{array}\right],
+\]
+
+\[
+XW=\left[\begin{array}{cc}
+0 & 0\\
+1 & 1\\
+1 & 1\\
+2 & 2
+\end{array}\right].
+\]
+
+Next we add the bias vector:
+
+\[
+\left[\begin{array}{cc}
+0 & -1\\
+1 & 0\\
+1 & 0\\
+2 & 1
+\end{array}\right].
+\]
+
+We apply Relu:
+
+\[
+\left[\begin{array}{cc}
+0 & 0\\
+1 & 0\\
+1 & 0\\
+2 & 1
+\end{array}\right],
+\]
+
+this nonlinear transformation is key as it allows the outter linear
+model to fit the nonlinear XOR, finally multiplying by $w$
+
+\[
+\left[\begin{array}{c}
+0\\
+1\\
+1\\
+0
+\end{array}\right].
+\]
+\end{example}
+
+\chapter{K-means and K-medoids}
+
+(Material adapted from Lester Mackey's slides). 
+
+\section{Unsupervised learning}
+
+The world is filled with apparent high dimensional complexity however
+it may be that much of the underlying structure is low-dimensional.
+How do we uncover the hidden structure of categories underlying our
+data?
+
+Unsupervised learning given covariates $x_{1},\cdots,x_{n}$, we can
+infer the underlying structure. 
+
+\textbf{Clustering: }Group these unlabeled images into three clusters
+or groups.
+
+\begin{figure}
+\begin{centering}
+\includegraphics[bb = 0 0 200 100, draft, type=eps]{figures/Kmeansimages.png}
+\par\end{centering}
+\caption{Example of image clustering for the students}
+
+\end{figure}
+
+We humans seem to be able to easily categorize a set of complex objects
+to simplify understanding, we can apply the same principle to machine
+learning. 
+
+Unsupervised learning is useful because most datasets are in fact
+unlabeled. Also they could be use to obtain compressed representations
+to save storage and computation. 
+
+They reduce noise, missing data, and irrelevant attributes in high-dimensional
+data. 
+
+It can be used also as a pre-processing step for supervised learning. 
+
+\section{K-means}
+
+The objective of K-means is to assign each datapoint to one of $k$
+clusters so that no average is closer to its cluster mean. 
+
+Datapoints $x_{i}\in\mathbb{R}^{p}$, cluster mean is $m_{j}\in\mathbb{R}^{p}$,
+cluster assignment is $z_{i}\in\{1,\cdots,k\}$. 
+
+Objective: $J(z_{1:n},m_{1:k})=\sum_{i=1}^{n}||x_{i}-m_{z_{i}}||_{2}^{2}$,
+where $||\cdot||_{2}^{2}$ is the squared Euclidean norm. 
+
+Goal: Minimize $J$ over $z_{1:n}$ and $m_{1:k}$. 
+
+\section{Standard $k$-means algorithm/ Lloyd's algorithm}
+
+-Initialize cluster means arbitrarily (e.g. sample from datapoints)
+
+-Alternate until convergence 
+\begin{itemize}
+\item Update cluster assignments: $z_{1:n}\leftarrow argmin_{z_{1:n}}J(z_{1:n}m_{1:k})$,
+i.e., assign each point to the cluster with the closest mean. 
+\item Update cluster means: $m_{1:k}\leftarrow argmin_{m_{1:k}}J(z_{1:n},m_{1:k})$,
+i.e., $m_{j}=\frac{\sum_{i=1}^{n}1(z_{i}=j)x_{i}}{\sum_{i=1}^{n}1(z_{i}=j)},$
+the mean of points in cluster $j$. 
+\end{itemize}
+The objective $J$ \textbf{always converges. }
+
+Lloyd's algorithm is a coordinate descent procedure. Each step monotonically
+decreases the objective. 
+
+Only finite number of partitions of data, so the objective must converge
+in finite number of steps. 
+
+Technically the algorithm could cycle if ties arise (multiple centroids
+equidistant from point). 
+
+We can avoid ties by assigning always the point to the smallest centroid
+under some total ordering of vectors. 
+
+\section{K-means limitations and Categorical Data}
+
+The Euclidean distance is restrictive for certain dataset like categorical
+features. Also the Euclidean distance is sensitive to outliers, and
+ill-suited for datasets with very different units/scales. 
+
+Also the K-means optimization problem is NP-hard. Lloyd's algorithm
+usually finds suboptimal solutions. Many random restarts often needed
+to obtain good performance. 
+
+Most important \textbf{the user must choose} $k$. 
+
+Running time: \#features $\times$ datapoints $\times$$k$ per iteration. 
+
+Generalized problem:
+
+Minimize $J_{d}(z_{1:n},m_{1:k})=\sum_{i=1}^{n}d(x_{i},m_{z_{i}})$. 
+
+Arbitrary dissimilarity/discrepancy measure $d(x,m)$. 
+
+Optimize via coordinate descent as in Lloyd's algorithm. 
+
+The great advantage is that it applies to all data types and dissimilarity
+measures. 
+
+Updating cluster representative $m_{1:k}$ may be expensive.
+
+\section{K-medoids algorithm}
+
+Minimize $J_{d}$ above but constrain each cluster representative
+to be a datapoint i.e., $m_{j}\in\{x_{1},\cdots,x_{n}\}$. 
+
+Don't need to store datapoint, only pairwise discrepancies. $d(x_{i},x_{j})$. 
+
+\section{Choosing the number of clusters $k$}
+
+Best case known beforehand. 
+
+Elbow method. 
+
+Gap statistic. 
+\end{document}
