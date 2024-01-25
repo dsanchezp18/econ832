@@ -7,22 +7,23 @@
 
 # Import packages (they need to be installed in the computer with using Pkg, Pkg.add("Package Name")
 
-import JuMP
-import Ipopt
+import JuMP # optimizer
+import Ipopt # optimizer
 
-using Random, Distributions
+using Random 
+using Distributions
 
 # Pre define parameters to be used below 
 
-Random.seed!(78909434)
+Random.seed!(78909434) # for reproducibility
 
-N = 100
-a = 0.5   # Demand intercept
-b = 0.5   # Demand slope
-α = 0.5   # Supply intercept
-β = 0.5   # Supply slope
+N = 100 # sample size
+a = 0.5 # Demand intercept
+b = 0.5 # Demand slope
+α = 0.5 # Supply intercept
+β = 0.5 # Supply slope
 
-σ_u = 1.5
+σ_u = 1.5 # 
 σ_v = 2.5
 
 μ_u = 0.0
