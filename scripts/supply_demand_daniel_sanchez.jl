@@ -23,11 +23,13 @@ b = 0.5 # Demand slope
 α = 0.5 # Supply intercept
 β = 0.5 # Supply slope
 
-σ_u = 1.5 # 
-σ_v = 2.5
+σ_u = 1.5 # Variance of demand shocks
+σ_v = 2.5 # Variance of supply shocks
 
-μ_u = 0.0
-μ_v = 0.0
+μ_u = 0.0 # Mean of demand shocks
+μ_v = 0.0 # Mean of supply shocks
+
+# Both demand and supply shocks are going to be mean zero
 
 # -------------------------------------------------------------------------- #
 # 1. Naive OLS estimation
