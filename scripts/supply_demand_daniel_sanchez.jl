@@ -21,7 +21,7 @@ Random.seed!(78909434) # for reproducibility
 
 N = 100 # sample size
 a = 0.5 # Demand intercept
-b = 0.5 # Demand slope
+b = 0.5 # Demand slope (note that we define as positive because in the demand equation )
 α = 0.5 # Supply intercept
 β = 0.5 # Supply slope
 
@@ -90,6 +90,8 @@ end
 
 ols_naive = JuMP.Model(Ipopt.Optimizer)    # Initializing the optimizer
 
+# Define variables for the optimization
+
 JuMP.@variable(ols_naive, γ0) # Gamma 0 is the intercept
 
 JuMP.@variable(ols_naive, γ1) # Gamma 1 is the slope
@@ -102,12 +104,12 @@ JuMP.optimize!(ols_naive) # Perform the optimization
 
 # Calculate the same value according to the known formula for the slope of the OLS estimator
 
-γ1_2 = cov(y,p)/var(p)  # Value obtained: -0.214
+γ1_2 = cov(y,p)/var(p)  # Value obtained: -0.214 (in absolute value, it is 0.214, which is far from 0.5, what it should be.)
 
-# The difference is pretty small, so the optimizer approximation is pretty good. 
+# OLS biased as the true value is 0.5
 
 # -------------------------------------------------------------------------- #
-# 2. IV estimation (2SLS)
+# 2. IV estimation (2SLS) through its structural equation
 # -------------------------------------------------------------------------- #
 
 # Simulate data for the instruments x_u and x_v 
@@ -151,12 +153,66 @@ x_v = zeros(N)
 # Use the expressions above to calculate the instruments with the loop and the coefficients c_u and c_v
 
 for i in 1:N
-    x_u[i] = ( u[i] - ϵ_u[i] ) / c_u 
-    x_v[i] = ( v[i] - ϵ_v[i] ) / c_v 
+    x_u[i] = (( u[i] - ϵ_u[i] ) / (c_u) )
+    x_v[i] = (( v[i] - ϵ_v[i] ) / (c_v)) 
 end
 
 # Estimate b_iv with the "structural" equation for it from the notes
 
+b1_iv2 = -(cov(y,x_v)/cov(p,x_v))    # Value obtained: -0.558. This is a far better estimation than the -0.21 obtained via naive OLS.
 
-b1_iv2 = -(cov(y,x_v)/cov(p,x_v))    # Value obtained: 0.558. This is a far better estimation than the -0.21 obtained via naive OLS.
+# -------------------------------------------------------------------------- #
+# 2. IV estimation (2SLS) through Ipot optimizer (assignment)
+# -------------------------------------------------------------------------- #
+
+# 2SLS takes the instrument and does two regressions: 
+# 1. Regress the endogenous variable on the instrument to obtain the predicted values of the endogenous variable
+# 2. Regress the predicted values of the endogenous variable on the dependent variable to obtain the coefficient estimate
+
+# In our case, the instrument is an exogenous, observed variable which affects shocks on supply, x_v. 
+# The endogenous variable is the price, p. (for the estimation of the structural demand elasticity, v)
+
+# First stage using Ipopt
+
+first_stage = JuMP.Model(Ipopt.Optimizer)    # Initializing the optimizer
+
+# Define the variables for the first stage optimization problem, which is the regression of the endogenous variable on the instrument. p_hat = π0 + π1*x_v
+
+JuMP.@variable(first_stage, π0) # Pi 0 is the intercept of the first stage regression
+
+JuMP.@variable(first_stage, π1) # Pi 1 is the slope of the first stage regression
+
+JuMP.@objective(first_stage, Min, sum((p[i] - π0 - π1*x_v[i])^2  for i in 1:N)) # Minimize the sum of squared residuals. This is the objective function
+
+JuMP.optimize!(first_stage) # Perform the optimization
+
+π0_hat = JuMP.value.(π0) # Access the intercept
+
+π1_hat = JuMP.value.(π1) # Access the slope
+
+p_hat = zeros(N) # Create a vector of zeros to later allocate values
+
+# For each i, assign the value of the expression for the predicted price
+
+for i in 1:N
+    p_hat[i] = π0_hat + π1_hat*x_v[i]
+end
+
+# Second stage using Ipopt  
+
+second_stage = JuMP.Model(Ipopt.Optimizer)    # Initializing the optimizer
+
+# Define the variables for the second stage optimization problem, which is the regression of the predicted endogenous variable on the dependent variable. y_hat = β0 + β1*p_hat
+
+JuMP.@variable(second_stage, γ0) # Gamma 0 is the intercept of the second stage regression
+
+JuMP.@variable(second_stage, γ1) # Gamma 1 is the slope of the second stage regression
+
+JuMP.@objective(second_stage, Min, sum((y[i] - γ0 - γ1*p_hat[i])^2  for i in 1:N)) # Minimize the sum of squared residuals. This is the objective function
+
+JuMP.optimize!(second_stage) # Perform the optimization
+
+γ1_hat = JuMP.value.(γ1) # Access the slope of the second stage regression
+
+# Absolute value of the coefficient estimate is 0.55, the same as the one obtained in the "structural" equation for the IV estimator. 
 

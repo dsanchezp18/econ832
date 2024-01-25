@@ -1,0 +1,6 @@
+---
+title: "ECON832 Assignment 1: Supply and Demand"
+author: "Daniel Sánchez"
+date: "2024-01-25"
+date-format: "DD MMM, YYYY"
+---
