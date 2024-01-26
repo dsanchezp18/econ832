@@ -21,7 +21,7 @@ Random.seed!(78909434) # for reproducibility
 
 N = 100 # sample size
 a = 0.5 # Demand intercept
-b = 0.5 # Demand slope (note that we define as positive because in the demand equation )
+b = 0.5 # Demand slope (note that we define as positive because in the demand equation there will be a negative sign attached to it)
 α = 0.5 # Supply intercept
 β = 0.5 # Supply slope
 
@@ -32,6 +32,8 @@ b = 0.5 # Demand slope (note that we define as positive because in the demand eq
 μ_v = 0.0 # Mean of supply shocks
 
 # Both demand and supply shocks are going to be mean zero and with a positive standard deviation 
+
+# Our primary purpose is to estimate b, the structural elasticity of demand
 
 # -------------------------------------------------------------------------- #
 # Naive OLS estimation
@@ -109,7 +111,7 @@ JuMP.optimize!(ols_naive) # Perform the optimization
 # OLS biased as the true value is 0.5
 
 # -------------------------------------------------------------------------- #
-# 2. IV estimation (2SLS) through its structural equation
+# 2. IV estimation (2SLS) through its theoretical equation
 # -------------------------------------------------------------------------- #
 
 # Simulate data for the instruments x_u and x_v 
@@ -157,9 +159,9 @@ for i in 1:N
     x_v[i] = (( v[i] - ϵ_v[i] ) / (c_v)) 
 end
 
-# Estimate b_iv with the "structural" equation for it from the notes
+# Estimate b_iv with the theoretical equation for it from the notes
 
-b1_iv2 = -(cov(y,x_v)/cov(p,x_v))    # Value obtained: -0.558. This is a far better estimation than the -0.21 obtained via naive OLS.
+b1_iv2 = (cov(y,x_v)/cov(p,x_v))    # Value obtained: -0.558. This is a far better estimation than the -0.21 obtained via naive OLS.
 
 # -------------------------------------------------------------------------- #
 # 2. IV estimation (2SLS) through Ipot optimizer (assignment)
@@ -214,5 +216,5 @@ JuMP.optimize!(second_stage) # Perform the optimization
 
 γ1_hat = JuMP.value.(γ1) # Access the slope of the second stage regression
 
-# Absolute value of the coefficient estimate is 0.55, the same as the one obtained in the "structural" equation for the IV estimator. 
+# Absolute value of the coefficient estimate is 0.55, the same as the one obtained in the theoretical equation for the IV estimator. 
 

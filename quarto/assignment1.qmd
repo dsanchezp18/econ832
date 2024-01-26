@@ -3,4 +3,46 @@ title: "ECON832 Assignment 1: Supply and Demand"
 author: "Daniel Sánchez"
 date: "2024-01-25"
 date-format: "DD MMM, YYYY"
+format: pdf
 ---
+
+This report shows how `Ipopt`'s solution to 2SLS is the same as solving 2SLS through its *theoretical* solution. 
+
+```{julia}
+#| label: julia-code-execution
+#| output: false
+
+include("../scripts/supply_demand_daniel_sanchez.jl")
+```
+
+## Theoretical solution solution
+
+We implement the structural solution using the following expression for the IV estimator, as follows
+
+$$b^{IV}= \frac{Cov[\mathbf{y}\mathbf{x_{v}}]}{Cov[\mathbf{p}\mathbf{x_v}]} $$
+
+which is equal to $b$, the structural elasticity of demand, under an exclusion restriction and an instrument relevance condition. The solution through the Julia implementation was the following:
+
+```{julia}
+#| label: structural-solution-output
+println(b1_iv2)
+```
+
+It is negative because the demand curve is downward sloping, as expected. Its absolute value is 0.56, which is not too far from 0.5, the true (and in reality unobserved) value of the elasticity of demand.
+
+## `Ipopt` solution 
+
+`Ipopt` and `JuMP` are used to solve the optimization problems of the first and second stages of 2SLS. The solution through the Julia implementation was the following:
+
+```{julia}
+#| label: ipopt-solution-output
+
+println(γ1_hat)
+```
+
+```{julia}
+#| label: difference
+#| echo: false
+
+println("The difference between the solutions is ", γ1_hat - b1_iv2)
+```

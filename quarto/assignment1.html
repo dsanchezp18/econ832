@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -35,6 +69,8 @@ ul.task-list li input[type="checkbox"] {
 <link href="assignment1_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="assignment1_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -63,7 +99,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">25, Jan, 2024</p>
+      <p class="date">25 Jan, 2024</p>
     </div>
   </div>
   
@@ -73,7 +109,38 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-
+<p>This report shows how <code>Ipopt</code>’s solution to 2SLS is the same as solving 2SLS through its <em>theoretical</em> solution.</p>
+<div id="julia-code-execution" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="st">"../scripts/supply_demand_daniel_sanchez.jl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="theoretical-solution-solution" class="level2">
+<h2 class="anchored" data-anchor-id="theoretical-solution-solution">Theoretical solution solution</h2>
+<p>We implement the structural solution using the following expression for the IV estimator, as follows</p>
+<p><span class="math display">\[b^{IV}= \frac{Cov[\mathbf{y}\mathbf{x_{v}}]}{Cov[\mathbf{p}\mathbf{x_v}]} \]</span></p>
+<p>which is equal to <span class="math inline">\(b\)</span>, the structural elasticity of demand, under an exclusion restriction and an instrument relevance condition. The solution through the Julia implementation was the following:</p>
+<div id="structural-solution-output" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(b1_iv2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>-0.55880374126099</code></pre>
+</div>
+</div>
+<p>It is negative because the demand curve is downward sloping, as expected. Its absolute value is 0.56, which is not too far from 0.5, the true (and in reality unobserved) value of the elasticity of demand.</p>
+</section>
+<section id="ipopt-solution" class="level2">
+<h2 class="anchored" data-anchor-id="ipopt-solution"><code>Ipopt</code> solution</h2>
+<p><code>Ipopt</code> and <code>JuMP</code> are used to solve the optimization problems of the first and second stages of 2SLS. The solution through the Julia implementation was the following:</p>
+<div id="ipopt-solution-output" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(γ<span class="fl">1</span>_hat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>-0.5588037412609901</code></pre>
+</div>
+</div>
+<div id="difference" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-stdout">
+<pre><code>The difference between the solutions is -1.1102230246251565e-16</code></pre>
+</div>
+</div>
+</section>
 
 </main>
 <!-- /main column -->
