@@ -4,6 +4,7 @@ import JuMP
 import Ipopt
 import Distributions
 using DataFrames
+using CSV
 using Random
 using Tables
 using LinearAlgebra
@@ -264,7 +265,3 @@ TSMC2
 ## In this case we cannot reject the null, as it should be. 
 
 ## Generate a new myfun function that now is defined for t in 1:T=4 and k in 1:K=2, recall that w[:,k,t]
-
-
-
-
