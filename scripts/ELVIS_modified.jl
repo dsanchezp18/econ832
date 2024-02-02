@@ -1,4 +1,12 @@
-### Simple illustration of ELVIS
+# Modified ELVIS
+# Problem Set 2
+# Due Feb 2nd, 2024
+# ECON 832 Computational Economics
+# SFU
+
+# Preliminaries --------------------------------------------------------------
+
+# Load packages
 
 import JuMP
 import Ipopt
@@ -10,21 +18,44 @@ using Tables
 using LinearAlgebra
 using Statistics
 
-## Generate a data Set
-##parameters
-T=2
-K=2
-N=100
-##utilities
-## u(x)=x1^α+x2^(1-α)
+# Set a seed for reproducibility
+
 Random.seed!(6749)
-α=rand(N)/2
-## lambdas
-λ=randexp(N).+1
-## prices
-p=randexp(N,K,T)
-## true consumption
-ct=zeros(N,K,T)
+
+# Generating the data ---------------------------------------------------------
+
+# Defining the parameters
+
+T=3 # time periods, this would be the extra moment condition 
+
+K=2 # goods
+
+N=100 # individuals
+
+# For the utility function u(x)=x1^α+x2^(1-α) (Cobb-Douglas)
+
+α = rand(N)/2 # alpha coefficient (the weight of good 1 in the utility function)
+
+# These would be random for every consumer, and we would have they sum to one, as per Cobb-Douglas
+
+# Lambdas (lagrange multipliers)
+
+λ = randexp(N).+1
+
+# Random number as per the exponential distribution plus 1
+
+# The dot is for element-wise operations
+
+# Prices
+
+p = randexp(N,K,T)
+
+## True consumption
+
+ct = zeros(N,K,T) # Defining the zero vector 
+
+# Looping over the individuals, goods and time periods
+
 for i in 1:N
     for k in 1:K
             for t in 1:T
@@ -38,7 +69,8 @@ for i in 1:N
     end
 end 
 
-##observed consumption
+# Observed consumption 
+
 a=.9
 b=1.1
 ϵ=(b-a).*rand(N,K,T).+a
@@ -81,6 +113,9 @@ ctp
 ## co=ctϵ, hence w=ct-co, w=(1-ϵ)ct
 ## E[w]=E[(1-ϵ)ct|ct]=0 iff E[ϵ|ct]=1, which it is. 
 ## E[w]=E[E[w|ct]]=0 law of iterated expectations. 
+## Third moment condition would be 
+## E[w^2]=E[(1-ϵ)^2ct^2|ct]=0 iff E[ϵ^2|ct]=1, which it is.
+
 
 ## moments
 wsim=zeros(N,K,T)
@@ -122,7 +157,6 @@ end
 
 
 w=jump(co,p)
-
 wc=zeros(N,K,T)
 
 ## repetitions n1=burn n2=sample accept
