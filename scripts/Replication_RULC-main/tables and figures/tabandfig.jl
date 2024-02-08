@@ -9,7 +9,7 @@ using StatsPlots
 using CategoricalArrays
 
 tempdir1=@__DIR__
-rootdir=tempdir1[1:findfirst("ReplicationABKK",tempdir1)[end]]
+rootdir=tempdir1[1:findfirst("Replication_RULC-main",tempdir1)[end]]
 dirresults=rootdir*"/tables and figures/results"
 pooled = Matrix(CSV.read(rootdir*"/data/menu_choice_pooled.csv", DataFrame));
 LC = Matrix(CSV.read(rootdir*"/data/menu_choice_low.csv", DataFrame));
