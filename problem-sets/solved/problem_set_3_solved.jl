@@ -119,50 +119,33 @@ B = 10000 # Number of bootstrap samples
 # Add worker processes for parallel computing
 addprocs(4)  
 
+@everywhere using JuMP
+@everywhere using Ipopt 
+@everywhere using DataFrames, Statistics, Distributions
+
 @everywhere begin
-    import JuMP
-    import Ipopt 
-    using DataFrames, Statistics, Distributions
     function two_stage_least_squares(df)
-    
+    N = 100
         # First stage
-        
         first_stage = JuMP.Model(Ipopt.Optimizer)
-    
         JuMP.@variable(first_stage, π0) # Pi 0 is the intercept of the first stage regression
-    
         JuMP.@variable(first_stage, π1) # Pi 1 is the slope of the first stage regression
-    
         JuMP.@objective(first_stage, Min, sum((df.p[i] - π0 - π1*df.x_v[i])^2  for i in 1:N))
-    
         JuMP.optimize!(first_stage) # Perform the optimization
-    
         π0_hat = JuMP.value.(π0) # Access the intercept
-    
         π1_hat = JuMP.value.(π1) # Access the slope
-    
         p_hat = zeros(N) # Create a vector of zeros to later allocate values
-    
         for i in 1:N
             p_hat[i] = π0_hat + π1_hat*df.x_v[i]
         end
-
         # Second stage
-    
         second_stage = JuMP.Model(Ipopt.Optimizer)
-    
         JuMP.@variable(second_stage, γ0) # Gamma 0 is the intercept of the second stage regression
-    
         JuMP.@variable(second_stage, γ1) # Gamma 1 is the slope of the second stage regression
-    
         JuMP.@objective(second_stage, Min, sum((df.y[i] - γ0 - γ1*p_hat[i])^2  for i in 1:N)) # Minimize the sum of squared residuals. This is the objective function
-    
         JuMP.optimize!(second_stage) # Perform the optimization
-    
         γ1_hat = -JuMP.value.(γ1) # Access the slope of the second stage regression
-        
         return γ1_hat
-        
     end
 
     function bootstrap_sample(df)
