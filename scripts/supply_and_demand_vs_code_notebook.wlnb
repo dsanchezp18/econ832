@@ -1,0 +1,45 @@
+{
+ "cells": [
+  {
+   "kind": 1,
+   "value": "# Wolfram Mathematica Notebook: Trying it out\r\n\r\nThis is a simple notebook to try out the Wolfram Mathematica language in VS Code using Wolfram Notebook extension. It connects to the Wolfram Engine and runs the code in the notebook, without the need to actually pay for Mathematica.",
+   "languageId": "markdown",
+   "outputs": [],
+   "metadata": {},
+   "executionSummary": {}
+  },
+  {
+   "kind": 2,
+   "value": "(* Define the equation *)\r\neqn = x^2 + 5*x + 6 == 0;\r\n\r\n(* Solve the equation *)\r\nsolution = Solve[eqn, x]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wexpr\"><wrow><w></w><wb>{</wb><wrow><w></w><wrow><w></w><wb>{</wb><wrow><w></w><w>x</w><w class=\"symbol\"></w><wrow><w></w><w>-</w><w>3</w></wrow></wrow><wb>}</wb></wrow><w>,</w><wrow><w></w><wb>{</wb><wrow><w></w><w>x</w><w class=\"symbol\"></w><wrow><w></w><w>-</w><w>2</w></wrow></wrow><wb>}</wb></wrow></wrow><wb>}</wb></wrow></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "{{x -> -3}, {x -> -2}}",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "2f994e12-f9be-496d-966a-b981a42db62c",
+     "metadata": {
+      "cellLabel": "Out[2]= ",
+      "isBoxData": false
+     }
+    }
+   ],
+   "metadata": {},
+   "executionSummary": {
+    "timing": {
+     "startTime": 1707610870938,
+     "endTime": 1707610871268
+    },
+    "executionOrder": 1,
+    "success": true
+   }
+  }
+ ]
+}
