@@ -1,0 +1,82 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      2465,         74]
+NotebookOptionsPosition[      1714,         54]
+NotebookOutlinePosition[      2115,         70]
+CellTagsIndexPosition[      2072,         67]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Supply and Demand Model", "Title",
+ CellChangeTimes->{{3.9165076298798475`*^9, 3.916507675810705*^9}, {
+  3.916507729732854*^9, 
+  3.9165077300296907`*^9}},ExpressionUUID->"b05f077a-2704-48a9-93f6-\
+bb9c63b193eb"],
+
+Cell["ECON832 Computational Methods in Economics", "Subtitle",
+ CellChangeTimes->{{3.916507737039857*^9, 
+  3.916507757387314*^9}},ExpressionUUID->"2bc7b5e7-d7f3-40bb-bb44-\
+c83961cb57bf"],
+
+Cell["", "Text",
+ CellChangeTimes->{{3.9165081219742975`*^9, 
+  3.916508129312877*^9}},ExpressionUUID->"fa0ff03e-f252-49a3-b0c4-\
+360dce4feee4"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.916507979626692*^9, 
+  3.916508023335765*^9}},ExpressionUUID->"7da026ba-2ec3-42dc-89e6-\
+20321e617fbe"],
+
+Cell[BoxData[
+ RowBox[{"d", " ", ":=", " ", 
+  RowBox[{"q", " ", "=", " ", 
+   RowBox[{"a", " ", "-", " ", 
+    RowBox[{"b", "*", "p"}]}]}]}]], "Code",
+ CellChangeTimes->{{3.9165077778272247`*^9, 3.9165077859486723`*^9}, {
+  3.9165078180528746`*^9, 3.9165078245559015`*^9}, {3.916508061803512*^9, 
+  3.9165080625257425`*^9}},
+ CellLabel->"In[2]:=",ExpressionUUID->"8cf4aaaf-1598-454b-8a4c-bbde7ad47842"]
+}, Open  ]]
+},
+WindowSize->{1141.2, 573.6},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"13.3 for Microsoft Windows (64-bit) (July 24, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"bd8efeca-36c0-4fd3-97b0-0b5b1c6000f6"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 219, 4, 98, "Title",ExpressionUUID->"b05f077a-2704-48a9-93f6-bb9c63b193eb"],
+Cell[802, 28, 188, 3, 53, "Subtitle",ExpressionUUID->"2bc7b5e7-d7f3-40bb-bb44-c83961cb57bf"],
+Cell[993, 33, 144, 3, 35, "Text",ExpressionUUID->"fa0ff03e-f252-49a3-b0c4-360dce4feee4"],
+Cell[1140, 38, 152, 3, 28, "Input",ExpressionUUID->"7da026ba-2ec3-42dc-89e6-20321e617fbe"],
+Cell[1295, 43, 403, 8, 50, "Code",ExpressionUUID->"8cf4aaaf-1598-454b-8a4c-bbde7ad47842"]
+}, Open  ]]
+}
+]
+*)
+
