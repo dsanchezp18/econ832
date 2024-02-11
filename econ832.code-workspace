@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../SFUComputationalEconomics2024"
 		}
 	],
 	"settings": {}
