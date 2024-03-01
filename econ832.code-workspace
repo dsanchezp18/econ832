@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "../SFUComputationalEconomics2024"
+		},
+		{
+			"path": "../Julia-BLP"
+		},
+		{
+			"path": "../USFQTopicsDecisionMaking"
 		}
 	],
 	"settings": {}
