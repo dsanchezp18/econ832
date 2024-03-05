@@ -1,0 +1,10 @@
+---
+title: "ECON832 Assignment 3: Report"
+date: "2024-03-08"
+date-format: "DD MMM, YYYY"
+format: pdf
+---
+
+# Problem 2: Bootstrap Standard Errors of the Supply and Demand Model
+
+In this problem, we are interested in estimating the standard errors of the $\beta$ coefficient in the supply and demand model using the bootstrap method. I estimated the true elasticity of demand, $b$, by performing 2SLS estimation through an `Ipopt` optimizer in Problem Set 1. 
