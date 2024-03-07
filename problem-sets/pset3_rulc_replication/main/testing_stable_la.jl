@@ -25,7 +25,7 @@ end
 
 #@everywhere model=$(ARGS[1])   # put "LA", "EBA", or "RUM"
 ## This line is not necessary if you are running the code from a shell, but if you are running it from a IDE you need to put the model as an argument
-@everywhere model="RUM"   # put "LA", "EBA", or "RUM"
+@everywhere model="EBA"   # put "LA", "EBA", or "RUM"
 println(model)
 
 ## Defining the file directories
@@ -41,7 +41,7 @@ model=="RUM" ? dYu=6 : dYu=5        # For RUM there are 6 options instead of 5
 Menus=collect(powerset(vec(1:dYm))) # Menus
 gindex=gindexes(Menus,dYu)          # Indices that correspond to nonzero linearly independent frequencies
 other_u = preferences(dYu)                  # All preference orders
-df_U = CSV.read(rootdir*"/main/RUM_model_rankings_modified.csv", DataFrame)
+df_U = CSV.read(rootdir*"/main/LA_model_rankings_modified.csv", DataFrame)
 # read the U and convert all rows to vectors 
 U = [Vector{Int64}(df_U[i, :]) for i in 1:size(df_U, 1)]
 G=matrixcons(gindex, Menus, U)      # Marix of 0 and 1

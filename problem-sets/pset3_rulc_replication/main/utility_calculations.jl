@@ -14,7 +14,7 @@ using Statistics
 
 # Load data for the lotteries
 
-lotteries = CSV.read("problem-sets/solved/lotteries.csv", DataFrame)
+lotteries = CSV.read("problem-sets/pset3_rulc_replication/data/lotteries.csv", DataFrame)
 
 # Calculating CRRA Utility for Table 1 Rankings ------------------------------
 
@@ -68,4 +68,4 @@ end
 
 # Save the dataframe to a csv file
 
-CSV.write("problem-sets/solved/lotteries_with_utilities.csv", lotteries)
+CSV.write("problem-sets/pset3_rulc_replication/data/lotteries_with_utilities.csv", lotteries)

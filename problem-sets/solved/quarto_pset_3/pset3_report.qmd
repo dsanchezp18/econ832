@@ -1,10 +1,82 @@
 ---
-title: "ECON832 Assignment 3: Report"
+title: "ECON832 Assignment 3 (Corrected): Report"
 date: "2024-03-08"
 date-format: "MMM DD, YYYY"
 format: pdf
-engine: jupyter
+header-includes:
+    - \usepackage{float}
 ---
+
+```{julia}
+#| label: setup
+#| output: false
+using CSV
+using DataFrames
+using Plots
+using Tidier
+using Distributed
+using Optim
+using PrettyTables
+```
+
+# Problem 1: Replicating RULC
+
+I replicate the RULC paper by modifying the utility function, specifically, using the CRRA utility function with a risk aversion parameters $\sigma$ from [-1, 1]. Considering the lotteries in the paper, I compute utilities as per the CRRA utility function for the given risk aversion parameters, and then produce the theoretical rankings that should be expected according to this utility function. 
+
+This can be seen below.
+
+```{julia}
+#| label: new-rankings
+#| echo: false
+#| output: true
+#| results: asis
+
+# Load the data from the working directory
+
+rankings = CSV.read("C:/Users/user/Documents/GitHub/econ832/problem-sets/solved/quarto_pset_3/lotteries_with_utilities.csv", DataFrame)
+
+# Select only the columns that are relevant for the CRRA utility function with sigma -1 to 1
+# Do so with the Tidier syntax
+
+modified_rankings = 
+    @chain rankings begin
+        @select(Lottery, Ranking, `Ranking_0.25`, `Ranking_0.27`, `Ranking_0.28`, `Ranking_1.0`)
+        @rename(`Ranking_-1.0` = Ranking)
+    end
+
+# Present the table
+
+pretty_table(modified_rankings, title = "Modified Rankings")
+```
+
+This was incorporated in the preference matrix `U` in the replication code, `testing_stable.jl`, in order to test whether RUM and the logit attention model explain the observed rankings in the experiment. Below, I include the computed t-statistics for both tests.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Hypothesis} & \textbf{Test statistics} & \textbf{$p$-value} \\
+\hline
+Value 1 & 54097.478383737005 & 0.0 \\ 
+Value 4 & 24959.0560261779 & 0.524 \\
+\hline
+\end{tabular}
+\caption{Test statistics for the RUM and logit attention model under modified nulls}
+\label{tab:table1_test_statistics}
+\end{table}
+
+As it can be seen, the RUM model is rejected at the 1% level, while the logit attention model is not rejected at the 5% level. Under the modified rankings because of the CRRA utility function with other $\sigma$ parameters, the RUM model is not able to explain the observed rankings in the experiment.
+
+## Bootstrap distributions
+
+I also show the computed bootstrap distributions for the RUM and logit attention model tests, as calculated in the replication code for the paper.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width = 0.7\textwidth]{C:/Users/user/Documents/GitHub/econ832/problem-sets/pset3_rulc_replication/main/results/Bootstrap_RUM_stable.png}
+\caption{Bootstrap distributions for the RUM and logit attention model tests}
+\label{fig:bootstrap_distributions}
+\end{figure}
 
 # Problem 2: Bootstrap Standard Errors of the Supply and Demand Model
 
@@ -29,10 +101,6 @@ For the estimation of bootstrap standard errors, I redefined my supply and deman
 #| label: bootstrap-std-errors
 #| eval: false
 
-using Distributed
-using Optim
-using DataFrames
-
 addprocs(4)
 
 @everywhere include("../problem_set_3_corrected_bootstrap_functions.jl")
@@ -46,6 +114,5 @@ beta_samples_pmap = beta_samples_pmap ./ 0.5
 std_errors = std(beta_samples_pmap)
 
 ```
-
 
 The bootstrap standard error for $\beta/b$ is 0.14124134. 
