@@ -17,6 +17,9 @@
 		},
 		{
 			"path": "../econ832-blp-midterm"
+		},
+		{
+			"path": "../julia-blp-modified"
 		}
 	],
 	"settings": {}
