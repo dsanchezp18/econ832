@@ -41,3 +41,9 @@ X = hcat(ones(n), X1, X2)
 df = DataFrame(y = y, X1 = X1, X2 = X2)
 
 ols = lm(@formula(y ~ X1 + X2), df)
+
+# Regress a variable on itself
+
+df = DataFrame(y = y)
+
+ols = lm(@formula(y ~ y), df)
