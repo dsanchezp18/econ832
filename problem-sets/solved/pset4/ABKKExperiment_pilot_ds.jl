@@ -99,7 +99,7 @@ function train(; kws...)
     model = Chain(Dense(37, 6, swish))
 
     # Defining loss function to be used in training
-    # For numerical stability, we use here logitcrossentropy
+    # For numerical stability, we use here logitcrossentropy (changed for problem set to logit binary)
     loss(x, y) = logitbinarycrossentropy(model(x), y)
 
     # Training
@@ -108,7 +108,6 @@ function train(; kws...)
 
     println("Starting training.")
     Flux.train!(loss, Flux.params(model), train_data, optimiser)
-
     return model, test_data
 end
 
@@ -135,4 +134,30 @@ cd(@__DIR__)
 model, test_data = train()
 test(model, test_data)
 
+# Get train data 
+
 normopt=true
+
+labels = string.(X1.choice)
+features = Matrix(X1[:,2:end])'
+normopt ? normed_features = normalise(features, dims=2) : normed_features=features
+
+klasses = sort(unique(labels))
+onehot_labels = onehotbatch(labels, klasses)
+
+# Split into training and test sets, 2/3 for training, 1/3 for test.
+train_indices = [1:3:12297 ; 2:3:12297]
+
+X_train = normed_features[:, train_indices]
+y_train = onehot_labels[:, train_indices]
+
+X_test = normed_features[:, 3:3:12297]
+y_test = onehot_labels[:, 3:3:12297]
+
+#repeat the data `args.repeat` times
+train_data = Iterators.repeated((X_train, y_train), 1000)
+
+# loss function for train data
+
+loss(X_train, y_train)
+
