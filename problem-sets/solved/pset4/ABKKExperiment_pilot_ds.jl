@@ -9,8 +9,6 @@ Pkg.activate()
 using Distributed
 using Statistics
 using DataFrames, CSV
-## add Plots, Random, Combinatorics, LinearAlgebra, JuMP, Ipopt, Flux, Statistics, Parameters
-#using Plots
 addprocs(7)
 
 @everywhere begin
@@ -159,5 +157,18 @@ train_data = Iterators.repeated((X_train, y_train), 1000)
 
 # loss function for train data
 
-loss(X_train, y_train)
+loss_train = logitbinarycrossentropy(model(X_train), y_train)
 
+# confusion matrix for test data (object as matrix)
+
+conf = confusion_matrix(X_test, y_test, model)
+
+loss_test = logitbinarycrossentropy(model(X_test), y_test)
+
+# accuracy for test
+
+in_test_accuracy = accuracy(X_test, y_test, model)
+
+# accuracy for train
+
+in_sample_accuracy = accuracy(X_train, y_train, model)
