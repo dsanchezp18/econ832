@@ -23,6 +23,7 @@
 		}
 	],
 	"settings": {
+		//"julia.environmentPath": "c:\\Users\\user\\Documents\\GitHub\\SFUComputationalEconomics2024"
 		//"julia.executablePath": "C:/Users/user/AppData/Local/Programs/Julia-1.6.7/bin/julia.exe"
 	}
 }
