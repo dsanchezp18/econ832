@@ -26,7 +26,7 @@ Models competing in the current choice prediction competition can make use of th
 
 - Experiment 1 includes Problems 151-210 listed in the link (Estimation data) below. These 60 choice problems were randomly selected according to the problem selection algorithm which is detailed here. Two-hundred and forty participants (139 female, MAge = 24.5) participated in the experiment, half at the Technion and half at the Hebrew University of Jerusalem. 
 
-- Each participant faced one set of 30 problems: half faced Problems 151-180 and the other half faced problems 181-210 (360 probelms, GameID variable). (Sets). The order of the problems was randomized among participants.
+- Each participant faced one set of 30 problems: half faced Problems 151-180 and the other half faced problems 181-210 (360 problems, GameID variable). (Sets). The order of the problems was randomized among participants.
 
 - Each problem was faced for 25 trials consecutively. The first five trials without feedback and the rest with full feedback. 
 
