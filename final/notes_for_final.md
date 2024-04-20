@@ -20,4 +20,14 @@ Read the website and see the papers models and codes
 
 Models competing in the current choice prediction competition can make use of the data collected as part of CPC15 (Erev et al., 2017). These data include Problems 1-150 given in the link (Estimation Data) below. In addition, to supplement and extend the data (and the space of choice problems), we ran Experiment 1, and plan to run Experiment 2 at a later date. The data of the latter will be used as the competition set for one of the tracks of the choice prediction competition (see below). The apparatus and design of these two new experiments are very similar to those used in Erev et al. (2017) and the reader is referred there for more details. Hereinafter, we provide the essentials.
 
-Experiment 1 includes Problems 151-210 listed in the link (Estimation data) below. These 60 choice problems were randomly selected according to the problem selection algorithm which is detailed here (add link). Two-hundred and forty participants (139 female, MAge = 24.5) participated in the experiment, half at the Technion and half at the Hebrew University of Jerusalem. Each participant faced one set of 30 problems: half faced Problems 151-180 and the other half faced problems 181-210. The order of the problems was randomized among participants. Each problem was faced for 25 trials consecutively. The first five trials without feedback and the rest with full feedback. Participants were paid for one randomly selected choice they made, in addition to a show-up fee. The final payoff ranged between 10 and 136 shekels, with a mean of 40 (about 11 USD).
+### Experiment 1 data
+
+- Different in that includes full feedback after each trial.
+
+- Experiment 1 includes Problems 151-210 listed in the link (Estimation data) below. These 60 choice problems were randomly selected according to the problem selection algorithm which is detailed here. Two-hundred and forty participants (139 female, MAge = 24.5) participated in the experiment, half at the Technion and half at the Hebrew University of Jerusalem. 
+
+- Each participant faced one set of 30 problems: half faced Problems 151-180 and the other half faced problems 181-210 (360 probelms, GameID variable). (Sets). The order of the problems was randomized among participants.
+
+- Each problem was faced for 25 trials consecutively. The first five trials without feedback and the rest with full feedback. 
+
+- Participants were paid for one randomly selected choice they made, in addition to a show-up fee. The final payoff ranged between 10 and 136 shekels, with a mean of 40 (about 11 USD).
