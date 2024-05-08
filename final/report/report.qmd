@@ -1,0 +1,193 @@
+---
+title: "ECON832 Final: Mini Paper"
+subtitle: "Choice Prediction Competition 2018 modelling with deep feedforward neural networks"
+author: "Daniel Sánchez Pazmiño"
+date: "2024-04-24"
+date-format: "MMMM YYYY"
+output-file: "SANCHEZ_Daniel_final_minipaper.pdf"
+format: pdf # Change to html if LaTeX not installed or causing issues
+execute:
+    echo: false
+    warning: false
+    message: false
+fig-align: center
+fig-pos: h
+geometry: 
+    - margin = 1in
+fig-cap-location: top
+tbl-cap-location: top
+number-sections: true
+fontsize: 12pt
+bibliography: references.bib
+header-includes:
+    - \usepackage{float}
+    - \floatplacement{table}{H}
+    - \setkomafont{author}{\normalsize}
+    - \setkomafont{disposition}{\bfseries \normalsize}
+    - \setkomafont{subtitle}{\normalsize}
+    - \setkomafont{date}{\normalsize}
+---
+
+```{julia}
+#| include: false
+#=
+To compile this Quarto notebook, run the following in the terminal:
+using Pkg
+Pkg.add("IJulia")
+using IJulia
+notebook()
+Needs tinytex or a full LaTeX distribution for PDF output, change format to html or docx if not available
+=#
+
+cd("../.")
+
+using Pkg
+Pkg.activate("final_env")
+
+using TidierFiles, PrettyTables
+```
+
+# Overview 
+
+The data comes from the CPC18 [@plonsky_etal17], which consists of experiments involving decision makers choosing between two lotteries. I focus on data exclusive to CPC18 (Experiment 1), which added attention features to the CPC15 data [@erev_etal17]. This experiment involved sixty choice problems for 240 participants. I use the calibration data set to train my deep feedforward neural network and the **individual track data** (Track II) to test the model. All replicating code and files are available on the [project's GitHub repository](https://github.com/dsanchezp18/econ832-final). 
+
+<!-- Two sets of problems were implemented, where participants faced one set of thirty problems. Each problem was faced for 25 trials, where the first five trials did not provide feedback about forgone and obtained payoffs. A trial involved choosing between two options, where each option (A or B) involved an underlying lottery with a probability distribution [@plonsky_etal18]. I use the calibration data set to train the DFNNs and the **individual track data** (Track II) to test the model. -->
+
+# Methodology
+
+## Data preparation
+
+The calibration dataset was filtered to only include Experiment 1 data (sets 5 and 6). The outcome variable was the binary indicator of the choice of B over A. Since the variable was already dichotomous, no transformation was needed. I include demographic variables in the baseline models: location, gender and age. I dichotomized categorical variables with Technion and male as the reference levels. 
+
+Risk features involve the number of lottery outcomes, the expected values, the low payoffs, and probabilities to draw from the lotteries and lot distribution shapes. The latter defines the distribution of the lotteries, which can be binomial around the expected value, right skewed or left skewed. They were dichotomized in the same way as the location and gender variables. 
+
+Other relevant variables involve whether there is ambiguity in the probabilities or if there is a correlation between the payoffs. Further, it is important to include trial numbers, potential and obtained payoffs obtained, and forgone payoffs. Some of these variables are categorical, but they are already dichotomized, so I didn't transform them.
+
+Regarding attention features, I include the number of time block, reaction time, feedback binary outcome, the onscreen button and the trial number within a game. 
+
+The processing of the calibration dataset was done using `TidierData.jl` and `DataFrames.jl`. I performed a test-train split with 80% of the data used for training and 20% for testing. I further tested with the individual track data @plonsky_etal_comp_ind. 
+
+## Feature engineering
+
+As mentioned, all categorical variables for both the risk and attention features were dichotomized. This is equivalent to **one-hot encoding**. The continuous variables were **standardized** to have $\mu = 0$ and $\sigma = 1$. The data was processed from its rectangular form (every row per decision) to a format where each row represented an attribute, and every column represented a decision.
+
+## Model configuration
+
+The model is a deep feedforward network neural network (DFNN) with `Flux.jl`. I use a ReLU activation function for the input and hidden layers and a sigmoid activation function for the output layer. I use MSE as the loss function and the gradient descent optimizer to minimize the loss function. The learning rate was set to 0.7, and I train the model for 100 epochs using a `for` loop. I use a confusion matrix and an accuracy rate (percent correctly predicted) to evalute the model's fit, using a 0.5 probability treshold to determine predicted classes.
+
+# Feature analysis
+
+## Risk features
+
+The correlation between the number of outcomes and the choice for the B lottery is 0.09, which is statistically significant at the 1% level. Further, the correlation between the low payoff of the lotteries and the choice for the B lottery is 0.11, which is statistically significant at the 1% level. This might be a result of the risk aversion of the participants, which is a common feature in decision-making and point towards the importance of considering risk-aversion in the model rather than risk ne
+utrality. The correlation between lotteries shows a relationship with the choice of B, with negative correlation of -0.14, which is statistically significant at the 1% level. 
+
+:::{#fig-features layout-ncol=2}
+
+![By shape of lottery distribution](../figures/barplot_by_lotshape.png){#fig-shapes height=7cm}
+
+![By payoff feedback](../figures/barplot_by_feedback.png){#fig-payoff height=7cm}
+
+Choices of lottery by attention and risk features
+:::
+
+In terms of the shape of the distribution, I identify that a symmetric distribution greatly favours the choice of B, as seen in @fig-shapes. Further, I also identify that the payoff that the payoff that the participant received shows a statistically significant correlation with the choice of B. I choose to include all 12 variables which jointly define the shape of the distribution in the model, as well as the payoff that the participant received plus the potential payoffs of A and B. 
+
+## Attention features
+
+I find that the forgone payoff has a statistically significant correlation with the choice of B, with a correlation of -0.016. While reaction time does not show a significant correlation with the choice of B, I include it along time blocks in the interest that its inclusion might point towards the importance of attention, and particularly fatigue, in the decision-making process. Giving feedback to the participant also shows a notable correlation with the choice of B, as shown in @fig-payoff. Finally, a button placed toward the left marginally favours choice of A, with a correlation of -0.002 with the choice of B.
+
+# Results and discussion
+
+@tbl-confusion-baseline-dfnn-train and @tbl-confusion-baseline-dfnn-comp display confusiones matrices for the baseline model with risk features only, for both the training data and the competition data. The accuracy rate for the training data is 75.88%, while for the competition data it is 82.51%. This suggests that the model is not overfitting, as the accuracy rate is similar for both datasets. The loss value (MSE) for the training data is 0.18, while for the competition data it is 0.14 too. 
+
+:::{#tbl-panel-dfnn layout-ncol=2}
+```{julia}
+#| label: tbl-confusion-baseline-dfnn-train
+#| output: asis
+#| tbl-cap: Training data
+
+confusion_baseline_dfnn =
+    read_csv("data/output/confusion_matrix_train_baseline_dfnn.csv")
+
+header = ["A", "B"]
+
+row_names = ["A", "B"]
+
+pretty_table(confusion_baseline_dfnn, alignment = [:l, :r], backend = Val(:markdown), header = header, row_labels = row_names)
+
+```
+```{julia}
+#| label: tbl-confusion-baseline-dfnn-comp
+#| output: asis
+#| tbl-cap: Competition data
+#| tbl-column: page
+
+confusion_baseline_dfnn =
+    read_csv("data/output/confusion_matrix_competition_baseline_dfnn.csv")
+
+header = ["A", "B"]
+
+row_names = ["A", "B"]
+
+pretty_table(confusion_baseline_dfnn, alignment = [:l, :r], backend = Val(:markdown), header = header, row_labels = row_names)
+```
+Confusion matrices for the baseline DFNN model
+:::
+
+The model which considers both risk and attention features has an accuracy rate of 57.12% for the training data and 62.40% for the competition data. The loss function value for the training data is 0.246, while for the competition data it is 0.245. @tbl-confusion-attention-dfnn-train and @tbl-confusion-attention-dfnn-comp display the confusion matrices for the model with attention features.
+
+:::{#tbl-panel-dfnn-attention layout-ncol=2}
+
+```{julia}
+#| label: tbl-confusion-attention-dfnn-train
+#| output: asis
+#| tbl-cap: Train
+#| tbl-column: page
+#| tbl-pos: h
+
+confusion_attention_dfnn =
+    read_csv("data/output/confusion_matrix_train_attention_dfnn.csv")
+
+header = ["A", "B"]
+
+row_names = ["A", "B"]
+
+pretty_table(confusion_attention_dfnn, alignment = [:l, :r], backend = Val(:markdown), header = header, row_labels = row_names)
+```
+
+```{julia}
+#| label: tbl-confusion-attention-dfnn-comp
+#| output: asis
+#| tbl-cap: Competition data
+#| tbl-column: page
+#| tbl-pos: h
+
+confusion_attention_dfnn =
+    read_csv("data/output/confusion_matrix_competition_attention_dfnn.csv")
+
+header = ["A", "B"]
+
+row_names = ["A", "B"]
+
+pretty_table(confusion_attention_dfnn, alignment = [:l, :r], backend = Val(:markdown), header = header, row_labels = row_names)
+```
+
+Confusion matrices for the DFNN model with attention features
+:::
+
+These performance metrics suggest that adding attention features to the feedforward neural network model does not improve accuracy. Attention features in this context may not be as relevant as the risk features in predicting the choice of B over A, and likely add noise to the model rather than improve its predictive power. The model with risk features only is the best model to predict the choice of B over A in the way that I have defined it.
+
+The deep forward feedward neural network model does not impose any structure on the data, unlike economic models such as BLP, which defines an indirect utility function
+
+$$u_{ij} = x_{ij}\beta + \xi_{ij}$$, 
+
+where $x_{ij}$ is the vector of observed characteristics of the choice, $\beta$ is the vector of parameters to be estimated, and $\xi_{ij}$ is the unobserved utility. The neural network model is more flexible and can capture non-linear relationships between the features and the outcome variable, however, it does not understand the underlying economic mechanisms that drive the decision-making process. This is why DFNNs are famously hard to interpret, unlike economic models, which typically provide clear interpretations of final results. For instance, using BLP yields an interpretable $\xi$ parameters which would allow me to understand the importance of each feature in the decision-making process. If I were to observe that the $\xi$ parameter for the number of outcomes is negative, I could infer that the more outcomes a lottery has, the less likely the participant is to choose it. This is purely theoretical given that BLP works with supply-side administrative data, however, it does speak toward the importance of understanding the underlying economic mechanisms that drive the decision-making process.
+
+In reviewing the literature which relates to the CPC18, it was seen that the best performing models were those which used a combination of machine learning and behavioural models (which take into account theory which we use in economics). CPC15 was won by the *Psychological Forest*, which random forests and behavioural models in conjunction [@plonsky_etal17a]. This model, with a 0.14 MSE, compares to the 0.13 MSE of the neural net models which were used as benchmarks in this paper (See table 10). Thus, incorporating theoretical mechanisms likely improves the model's predictive power, however, only relying on structural models is still not enough to maximize prediction power. 
+
+# References {.unnumbered}
+
+:::{.refs}
+
+:::

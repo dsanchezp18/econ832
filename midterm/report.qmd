@@ -1,0 +1,193 @@
+---
+title: "ECON832 Midterm"
+author: "Daniel Sánchez Pazmiño"
+date: "2024-03-17"
+date-format: "MMMM YYYY"
+output-file: "SANCHEZ_Daniel_midterm.pdf"
+format: pdf # Change to html if LaTeX not installed or causing issues
+execute:
+    echo: false
+    warning: false
+    message: false
+number-sections: true
+bibliography: "https://api.citedrive.com/bib/caa79ed9-32d0-42b5-a8f6-e3f1d3549663/references.bib?x=eyJpZCI6ICJjYWE3OWVkOS0zMmQwLTQyYjUtYThmNi1lM2YxZDM1NDk2NjMiLCAidXNlciI6ICIxNzk4IiwgInNpZ25hdHVyZSI6ICI1MDdmYTJjNTFmNmY3NjBmZjY1ZTA3ODY2YzNhZjFiZGU1ODI3OGVmYTc5YmZhODJkODAxMGY1YmI2ZmVkMzA4In0=/bibliography.bib"
+header-includes:
+    - \usepackage{float}
+    - \usepackage{amsmath, amsfonts, amssymb, amsthm}
+---
+```{julia}
+#| include: false
+#=
+To compile this Quarto notebook, run the following in the terminal:
+using Pkg
+Pkg.add("IJulia")
+using IJulia
+notebook()
+Also might need to install tinytex or a full LaTeX distribution for PDF output
+=#
+using Pkg
+Pkg.activate(".")
+Pkg.instantiate()
+
+using CSV
+using DataFrames
+using PrettyTables
+using AbstractTrees
+using FileTrees
+```
+
+# Preliminaries {.unnumbered}
+
+This is the report for my ECON832 midterm responses. The attached files include all replicating code to obtain the results. The folders are organized as follows:
+
+![Repository files organization](figures/filetree.png){width=2in}
+
+Files have been attached to the Canvas submission along with this PDF document. A makefile `.sh` script has been included to run all relevant Julia scripts.
+
+# Problem 1: BLP Estimation
+
+## Data Analysis
+
+In this part, I used `TidierData.jl`, Julia's implementation of R's *dplyr*, to reshape the simulated data to the format of the original BLP data, as seen in the `JuliaBLP` repository. This is present in the `problem1_1_data_analysis.jl` in the `scripts` subfolder of my project repository. 
+
+I assume that the provided data describes three products per market: MD, TH and SB, each produced by a different firm. Each will have a different market share for every `marketid`. I first pivot the attributes data to a *long format* (in a stepwise fashion, first the prices, then the caffeine scores), and then join them together based on their `marketid` and `product` columns. See below for a code snippet of the procedure for the price reshape procedure.
+
+```{julia}
+#| eval: false
+#| echo: true
+prices = @chain attributes_raw begin
+    @select(marketid, price_MD, price_TH, price_SB)
+    @rename(MD = price_MD, TH = price_TH, SB = price_SB)
+    @pivot_longer(MD:SB, names_to = "product", values_to = "price")
+end
+```
+
+After joining the prices and caffeine scores together based on auxiliary `markeitd` and `product` columns, I repeated the same procedure for the market shares data. I calculated an `outshr` variable (included in the original BLP data), even though I don't end up using it, since it is only used in the `Demand - OLS and 2SLS.jl` script, which is a biased estimation of elasticities, unlike BLP. 
+
+To calculate it, I calculated the total market share for each market and then obtained the `outshr` variable by subtracting the market share of each product from the total market share. After this was done, I joined the market shares data with the attributes data to obtain the final dataset. I noticed that market shares do *not* sum to 1; I discuss the implications of this in subsection 3 for this problem. 
+
+I also include the cost characteristic, $w$, in the dataset, which is the caffeine score cost attribute that is observed by firms. I reshape it in the same way as the other attributes, and then join it to the final dataset based on the `marketid` and `product` working columns.
+
+I created a firm identifier `firmid`, as in the BLP dataset, by reassigning identifiers to the working `product` column so that MD is 1, TH is 2 and SB is 3. I also create a product id, `id`, which assumes that all products are different across markets, hence, it is simply a row number identifier when the dataset is ordered ascendently by $T$ and $J$ (the number of markets and firms, respectively). I added the constant term, `const`, which is a vector of ones, to the dataset, as it is used in the BLP estimation.
+
+The final dataset was named `reshaped_product_data.csv` and saved to the `data/output` directory for later use. See @fig-product for the required screenshot. 
+
+Note that even though this question did not ask for the reshaping of instruments for the following parts, I implemented procedures similar to the one I did here in the `problem1_2_elasticities.jl` script, which reshapes the instruments for the BLP estimation, as the provided instruments are not in a format that can be used directly in the code. I do not describe this process in those parts for brevity, but know that the same reshaping procedures were followed. 
+
+![Product Data](figures/product_data.png){#fig-product}
+
+## BLP estimation with the provided instruments
+
+@tbl-elasticities-1-2 below shows the results of the BLP estimation using the provided instruments. The replicating code for these results can be found in the `problem1_2_estimation.jl` script in the `scripts` subfolder. Dependencies are `demand_functions.jl`, `demand_derivatives.jl`, and `demand_instruments.jl`, found in the `scripts/functions` directory. These are the modified functions from the `JuliaBLP` repository.
+
+```{julia}
+#| label: tbl-elasticities-1-2
+#| output: asis
+#| tbl-cap: Average elasticities with provided instruments
+#| tbl-cap-location: top
+
+# Load the average elasticities for problem 1.2
+
+elasticities_1_1 = CSV.read("data/output/elasticities_1_2.csv", DataFrame)
+
+# Display a nice table
+
+header = ["Elasticity", "Estimate"]
+
+pretty_table(elasticities_1_1, alignment = [:l, :r], backend = Val(:markdown), header = header)
+
+```
+
+Compared to the simulation parameters of $\beta$ = -1.5 and $\gamma$ = 0.1, the estimation does not fall too far from the true values. My estimated price elasticity of demand is -1.05, which means that an additional increase of 1\% in the price of a product will decrease the share of that product by 1.05\%. On the other hand, my estimated caffeine score elasticity is 2.04, which means that an additional increase of 1\% in the caffeine score of a product will increase the share of that product by 2.04\%. 
+
+Finally, regarding my supply side parameter, I estimate a caffeine score cost elasticity of 0.22, which means that an additional increase of 1\% in the caffeine score of a coffee product will increase the marginal cost of that product by 0.22\%. Note that for this elasticity, I performed 2SLS to instrument for the endogenous cost characteristic in the regression of the marginal cost (in log form) on the caffeine score cost characteristic. The instruments were the ones provided in the simulated data for this exam. 
+
+Regarding best practices, I follow recommendations set out in the `PyBLP` article [@Conlon_2020] to choose my tuning parameters and optimizers for the estimation process. I only applied the recommendations that applied to the case of this simplified BLP problem, since best practices are only applicable to more complex problems. 
+
+First, to define my simulated consumers, I used a multivariate normal distribution with mean zero and variance one, using Julia's `MvNormal` function from the `Distributions` package. I tried different values until I eventually selected a sample size $s$ of for the demand side simulation, but it can be changed, conditional on computer performance. 
+
+Additionally, following the article, I changed tolerance for solving shares, $\epsilon_{tol}$, to 1e-12, which falls within the recommended range of 1e-12 to 1e-14. Previously, the tolerance had been set higher, which propagated error to the estimation process. This change was reflected in the `demand_functions.jl` script.
+
+Another recommendation was to not use the Nelder-Mead algorithm in the optimization routine for the estimation process. I used the `Optim` package in Julia, which has a variety of optimization algorithms, and choose not to use the Nelder-Mead algorithm. Currently, the script includes the `LBFGS` algorithm, `BFGS` and gradient descent methods, which are derivative based and are recommended for BLP estimation. I also decreased the tolerance to 1e-12 and increased the maximum amount of iterations for each of these algorithms. 
+
+## BLP estimation with code-generated instruments
+
+```{julia}
+#| label: tbl-elasticities-1-3
+#| output: asis
+#| tbl-cap: Average elasticities with the code-generated instrument
+#| tbl-cap-location: top
+
+# Load the average elasticities for problem 1.3
+
+elasticities_1_3 = CSV.read("data/output/elasticities_1_3.csv", DataFrame)
+
+# Display a nice table
+
+header = ["Elasticity", "Estimate"]
+
+pretty_table(elasticities_1_3, alignment = [:l, :r], backend = Val(:markdown), header = header)
+```
+
+@tbl-elasticities-1-3 shows the results of the BLP estimation using the code-generated instrument(s). The replicating code for these results can be found in the `problem1_3_estimation.jl` script. Dependencies are the same as in the previous subsection. This estimation has several caveats which I discuss below. 
+
+My estimate for $\beta$ is not too far off from its true value. I report two estimates for $\gamma$, one from the OLS procedure which simply regresses the price on the caffeine cost attribute, and another from the 2SLS procedure, which uses the generated instrument to estimate the caffeine score cost elasticity. The -1.73 estimate for the average price elasticity is higher than the one I found in the last part, the caffeine score elasticity in this part is only marginally different, and the caffeine score cost elasticity estimate are both higher than the ones I found in the last part. Both estimates for the cost elasticity are likely biased, as they are higher from their true value of 0.2. This is likely due to the fact that the generated instrument is not valid, as I discuss below.
+
+The provided code in the `JuliaBLP` repository states that there are two sets of instruments: characteristics of *other* products from *same company* in *same market*, as well as the characteristics of other products from *other companies* in *same market*. Because in this setting every company only produces one product, the first set of instruments does not apply, so I cannot construct that instrument^[By fixing the dimensions of the code of the `BLP_instruments` function in the `JuliaBLP` repository, I am actually able to get the `IV` matrix, but it produces a matrix that induces a singular matrix in the 2SLS regression. This is because the procedure of getting instruments returns the same cost characteristics, thus there is perfect collinearity, which explains the presence of a singular matrix.]. I am definitely able to construct the second set of instruments, which is the instrument that I use in the demand-side estimation of average price and caffeine score elasticities. However, because the inclusion of both instruments was needed, I am unable to ensure the exclusion restriction and thus the validity of BLP in this part. This might make my $\theta$ biased.
+
+This seems to affect the cost elasticities more than the demand elasticities. I performed 2SLS by recreating the `BLP_instruments` function code to obtain cost charactersitics for products made from other companies in the same companies. I then used 2SLS to instrument for the endogenous cost characteristic in the regression of the marginal cost (in log form) on the caffeine score cost characteristic. I am not fully sure that I meet exclusion restrictions with only one instrument. Further, it's possible that because the shares do not sum to one, my procedure to find instruments is not adequate. 
+
+# Problem 2: Merger Simulation
+
+## Setup
+
+To simulate a merger between firms TH and MD (`firmid`'s 1 and 2), I was easily able to calculate the caffeine scores $x$ and caffeine score cost attributes $w$ for both scenarios using the provided data and the scenarios. Using my estimates for the baseline scenario which I obtained in Problem 1.1, I used the following equation to estimate marginal cost. 
+
+$$\ln{mc_j} = w_j\theta_3 + \omega_j$$
+
+where $w_j$ contains the modified caffeine score cost attributes for merged firms and the old cost attributed for firm SB (`firmid` = 3). Everything else would stay the same as in the baseline scenario. 
+
+The most important principle is that firms profit maximize as follows:
+
+$$\Pi_f=\sum_{j \in \mathcal{F}_j}\left(p_j-m c_j\right) M s_j(p, x, \xi ; \theta)$$
+
+which involves the following first order conditions:
+
+$$
+\begin{gathered}
+s_j(p, x, \xi, \theta)+\sum_{r \in \mathcal{F}_f}\left(p_r-m c_r\right) \frac{\partial s_r(p, x, \xi ; \theta)}{\partial p_j}=0 . \\
+\Delta_{j r}= \begin{cases}-\frac{\partial s_r}{\partial p_j} & \exists f: r, j \in \mathcal{F}_f \\
+0 & \text { otherwise }\end{cases}
+\end{gathered}
+$$
+
+Given that this is a counterfactual setting, this is the inverse problem to the one I solved in the previous problems, I have $\theta$, $\xi$, $x$, $mc$ yet need to find $p$, with which I can $s$. This a non-linear problem, which I can solve by minimizing the first equation (recognizing that symbolically, it should be as small as possible or equal to zero.) I minimize with respect to $p$ to find the equilibrium price. 
+
+$$\min_{p} s_j(p, x, \xi, \theta) \sum_{j \in \mathcal{F}_f}\left(p_j-m c_j\right) \frac{\partial s_r}{\partial p_j}$$
+
+The share function with respect to price is given by the predicted share function $\sigma_j$, which was shown to have only $\delta$ with any set of market shares $s_j$ and a contraction mapping $\Theta$. The function in its simplified format (without an integral) is the following:
+
+$$
+s_j = 
+\sigma_j\left(\delta, \theta ; P^{n s}\right)=\sum_{r=1}^{n s} \frac{\exp \left(\delta_j+\sum_k x_{j k} \theta_{2 k} \nu_{r k}\right)}{1+\sum_s \exp \left(\delta_s+\sum_k x_{j k} \theta_{2 k} \nu_{r k}\right)} 
+$$
+
+I would already have everything in this equation except for $\delta$. I know that $\delta$ can be expressed as follows:
+
+$$ \delta_j =x_j \theta + \xi_j x_j^*\theta_1 + p_j\theta_2  + \xi  $$
+
+which are all values that I already have except for the price. I would also need to estimate the $\displaystyle{\dfrac{\partial s_r}{\partial p_j}}$, which is the derivative of the share function with respect to price. This is already given to me in the code of the `JuliaBLP` repository in the following way:
+
+$$
+\frac{\partial s_r}{\partial p_j} = \int_{v} \left(\alpha + v_{ikp}s_v\right) \tau_j(1 - \tau_j) f(v)dv
+$$
+
+where $\tau_j$ is the interior of the integral of $\sigma_j$. 
+
+With all this in mind, this can be solved using Julia's `Optim` package. Unfortunately, due to time constraints, I was unable to implement this in code, but the problem is defined in this subsection. 
+
+After being able to do this, I would be able to compute consumer and producer surplus for this counterfactual scenario. I should also compare to a calculation for baseline surplus. If the merger counterfactual surplus is higher than the baseline surplus, then the merger could be accepted by the regulatory authority. Intuition tells me than in the efficiency scenario and an elastic demand of $\beta$ < -1, the firms would be able to exert market power to increase prices and approach monopoly pricing. In this scenario, the deadweight loss would make total society surplus lower than in the baseline scenario.
+
+In the average cost scenario, the firms are not able to exert market power to increase prices that much, so the contrary would happen. The deadweight loss is not enough to make total consumer surplus lower than in the baseline scenario.
+
+# References
